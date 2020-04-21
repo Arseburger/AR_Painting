@@ -18,9 +18,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    
-    
-    sceneView.layer.cornerRadius = 30.0
     // Set the view's delegate
     sceneView.delegate = self
     
@@ -76,9 +73,5 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     // Reset tracking and/or remove existing anchors if consistent tracking is required
     
   }
-  
-  //  func screenShot() {
-  //    print(sceneView.session.currentFrame?.anchors)
-  //  }
   
 }
