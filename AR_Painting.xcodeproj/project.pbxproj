@@ -7,9 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A8407C192450F351001A599A /* ShotButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8407C182450F351001A599A /* ShotButton.swift */; };
 		A8407C1D24510BE7001A599A /* TitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8407C1B24510BE7001A599A /* TitleCell.swift */; };
 		A8407C1E24510BE7001A599A /* TitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A8407C1C24510BE7001A599A /* TitleCell.xib */; };
+		A88406E0245362CA00C7913A /* PhotoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88406DF245362CA00C7913A /* PhotoController.swift */; };
+		A88406E22453703D00C7913A /* ChoosePhotoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88406E12453703D00C7913A /* ChoosePhotoController.swift */; };
+		A8C66AEA245397E5006D7228 /* LeckerliOne-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = A8C66AE8245397C5006D7228 /* LeckerliOne-Regular.otf */; };
+		A8C66AEC24539A8A006D7228 /* Design.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C66AEB24539A8A006D7228 /* Design.swift */; };
 		A8D9890424476BF00022869D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D9890324476BF00022869D /* AppDelegate.swift */; };
 		A8D9890624476BF00022869D /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = A8D9890524476BF00022869D /* art.scnassets */; };
 		A8D9890824476BF00022869D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D9890724476BF00022869D /* ViewController.swift */; };
@@ -19,10 +22,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		A8407C182450F351001A599A /* ShotButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotButton.swift; sourceTree = "<group>"; };
-		A8407C1A2450F992001A599A /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		A8407C1B24510BE7001A599A /* TitleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleCell.swift; sourceTree = "<group>"; };
 		A8407C1C24510BE7001A599A /* TitleCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TitleCell.xib; sourceTree = "<group>"; };
+		A88406DF245362CA00C7913A /* PhotoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoController.swift; sourceTree = "<group>"; };
+		A88406E12453703D00C7913A /* ChoosePhotoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoosePhotoController.swift; sourceTree = "<group>"; };
+		A8C66AE8245397C5006D7228 /* LeckerliOne-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "LeckerliOne-Regular.otf"; sourceTree = "<group>"; };
+		A8C66AEB24539A8A006D7228 /* Design.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Design.swift; sourceTree = "<group>"; };
 		A8D9890024476BF00022869D /* AR_Painting.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AR_Painting.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8D9890324476BF00022869D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A8D9890524476BF00022869D /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -44,6 +49,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A8C66AED2453A1B8006D7228 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				A8407C1B24510BE7001A599A /* TitleCell.swift */,
+				A8407C1C24510BE7001A599A /* TitleCell.xib */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		A8C66AEE2453A1C6006D7228 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				A8D9890724476BF00022869D /* ViewController.swift */,
+				A88406DF245362CA00C7913A /* PhotoController.swift */,
+				A88406E12453703D00C7913A /* ChoosePhotoController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		A8C66AEF2453A1E2006D7228 /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				A8C66AEB24539A8A006D7228 /* Design.swift */,
+				A8C66AE8245397C5006D7228 /* LeckerliOne-Regular.otf */,
+			);
+			path = Design;
+			sourceTree = "<group>";
+		};
 		A8D988F724476BF00022869D = {
 			isa = PBXGroup;
 			children = (
@@ -63,15 +96,13 @@
 		A8D9890224476BF00022869D /* AR_Painting */ = {
 			isa = PBXGroup;
 			children = (
-				A8D9890324476BF00022869D /* AppDelegate.swift */,
-				A8D9890524476BF00022869D /* art.scnassets */,
-				A8D9890724476BF00022869D /* ViewController.swift */,
-				A8407C182450F351001A599A /* ShotButton.swift */,
-				A8407C1B24510BE7001A599A /* TitleCell.swift */,
-				A8407C1C24510BE7001A599A /* TitleCell.xib */,
-				A8407C1A2450F992001A599A /* MyPlayground.playground */,
-				A8D9890924476BF00022869D /* Main.storyboard */,
+				A8C66AEF2453A1E2006D7228 /* Design */,
 				A8D9890C24476BF30022869D /* Assets.xcassets */,
+				A8D9890524476BF00022869D /* art.scnassets */,
+				A8C66AEE2453A1C6006D7228 /* Controllers */,
+				A8C66AED2453A1B8006D7228 /* Cells */,
+				A8D9890324476BF00022869D /* AppDelegate.swift */,
+				A8D9890924476BF00022869D /* Main.storyboard */,
 				A8D9890E24476BF30022869D /* LaunchScreen.storyboard */,
 				A8D9891124476BF30022869D /* Info.plist */,
 			);
@@ -136,6 +167,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A8C66AEA245397E5006D7228 /* LeckerliOne-Regular.otf in Resources */,
 				A8D9890624476BF00022869D /* art.scnassets in Resources */,
 				A8D9891024476BF30022869D /* LaunchScreen.storyboard in Resources */,
 				A8D9890D24476BF30022869D /* Assets.xcassets in Resources */,
@@ -151,10 +183,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A88406E0245362CA00C7913A /* PhotoController.swift in Sources */,
 				A8407C1D24510BE7001A599A /* TitleCell.swift in Sources */,
 				A8D9890824476BF00022869D /* ViewController.swift in Sources */,
+				A8C66AEC24539A8A006D7228 /* Design.swift in Sources */,
+				A88406E22453703D00C7913A /* ChoosePhotoController.swift in Sources */,
 				A8D9890424476BF00022869D /* AppDelegate.swift in Sources */,
-				A8407C192450F351001A599A /* ShotButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
