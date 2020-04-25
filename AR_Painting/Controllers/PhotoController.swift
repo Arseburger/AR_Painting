@@ -23,6 +23,10 @@ class PhotoController: UIViewController {
     configureViews()
   }
   
+  
+  
+  
+  
   func configureViews() {
     topView.backgroundColor = customBlueColor
     bottomView.backgroundColor = customPinkColor

@@ -2,7 +2,7 @@
 //  TitleCell.swift
 //  AR_Painting
 //
-//  Created by Александр Королёв on 23.04.2020.
+//  Created by Александр Королёв on 25.04.2020.
 //  Copyright © 2020 Александр Королёв. All rights reserved.
 //
 
@@ -10,14 +10,16 @@ import UIKit
 
 class TitleCell: UITableViewCell {
   
-  @IBOutlet weak var titleLabel: UILabel!
+  @IBOutlet weak var label: UILabel!
   
-  override func awakeFromNib() {
-    super.awakeFromNib()
-    selectionStyle = .none
+    override func awakeFromNib() {
+        super.awakeFromNib()
+      
+    }
 
-    titleLabel.font = UIFont.systemFont(ofSize: 22, weight: .bold)
-    
-  }
-  
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+
+    }
+
 }
