@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A8407C1D24510BE7001A599A /* TitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8407C1B24510BE7001A599A /* TitleCell.swift */; };
-		A8407C1E24510BE7001A599A /* TitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A8407C1C24510BE7001A599A /* TitleCell.xib */; };
+		A8224F9224547D3600D8FF4F /* TitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8224F9124547D3600D8FF4F /* TitleCell.swift */; };
+		A8224F9A2454B75100D8FF4F /* AlbumSelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8224F992454B75100D8FF4F /* AlbumSelectionCell.swift */; };
+		A8224F9C2454B76600D8FF4F /* DownloadSelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8224F9B2454B76600D8FF4F /* DownloadSelectionCell.swift */; };
 		A88406E0245362CA00C7913A /* PhotoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88406DF245362CA00C7913A /* PhotoController.swift */; };
 		A88406E22453703D00C7913A /* ChoosePhotoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88406E12453703D00C7913A /* ChoosePhotoController.swift */; };
 		A8C66AEA245397E5006D7228 /* LeckerliOne-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = A8C66AE8245397C5006D7228 /* LeckerliOne-Regular.otf */; };
@@ -22,8 +23,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		A8407C1B24510BE7001A599A /* TitleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleCell.swift; sourceTree = "<group>"; };
-		A8407C1C24510BE7001A599A /* TitleCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TitleCell.xib; sourceTree = "<group>"; };
+		A8224F9124547D3600D8FF4F /* TitleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleCell.swift; sourceTree = "<group>"; };
+		A8224F992454B75100D8FF4F /* AlbumSelectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumSelectionCell.swift; sourceTree = "<group>"; };
+		A8224F9B2454B76600D8FF4F /* DownloadSelectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadSelectionCell.swift; sourceTree = "<group>"; };
 		A88406DF245362CA00C7913A /* PhotoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoController.swift; sourceTree = "<group>"; };
 		A88406E12453703D00C7913A /* ChoosePhotoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoosePhotoController.swift; sourceTree = "<group>"; };
 		A8C66AE8245397C5006D7228 /* LeckerliOne-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "LeckerliOne-Regular.otf"; sourceTree = "<group>"; };
@@ -52,8 +54,9 @@
 		A8C66AED2453A1B8006D7228 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				A8407C1B24510BE7001A599A /* TitleCell.swift */,
-				A8407C1C24510BE7001A599A /* TitleCell.xib */,
+				A8224F9124547D3600D8FF4F /* TitleCell.swift */,
+				A8224F992454B75100D8FF4F /* AlbumSelectionCell.swift */,
+				A8224F9B2454B76600D8FF4F /* DownloadSelectionCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -172,7 +175,6 @@
 				A8D9891024476BF30022869D /* LaunchScreen.storyboard in Resources */,
 				A8D9890D24476BF30022869D /* Assets.xcassets in Resources */,
 				A8D9890B24476BF00022869D /* Main.storyboard in Resources */,
-				A8407C1E24510BE7001A599A /* TitleCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -183,9 +185,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A8224F9224547D3600D8FF4F /* TitleCell.swift in Sources */,
+				A8224F9A2454B75100D8FF4F /* AlbumSelectionCell.swift in Sources */,
 				A88406E0245362CA00C7913A /* PhotoController.swift in Sources */,
-				A8407C1D24510BE7001A599A /* TitleCell.swift in Sources */,
 				A8D9890824476BF00022869D /* ViewController.swift in Sources */,
+				A8224F9C2454B76600D8FF4F /* DownloadSelectionCell.swift in Sources */,
 				A8C66AEC24539A8A006D7228 /* Design.swift in Sources */,
 				A88406E22453703D00C7913A /* ChoosePhotoController.swift in Sources */,
 				A8D9890424476BF00022869D /* AppDelegate.swift in Sources */,
