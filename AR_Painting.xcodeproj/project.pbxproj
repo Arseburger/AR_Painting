@@ -10,6 +10,7 @@
 		A8224F9224547D3600D8FF4F /* TitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8224F9124547D3600D8FF4F /* TitleCell.swift */; };
 		A8224F9A2454B75100D8FF4F /* AlbumSelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8224F992454B75100D8FF4F /* AlbumSelectionCell.swift */; };
 		A8224F9C2454B76600D8FF4F /* DownloadSelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8224F9B2454B76600D8FF4F /* DownloadSelectionCell.swift */; };
+		A8224F9E2454CE9E00D8FF4F /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8224F9D2454CE9E00D8FF4F /* Network.swift */; };
 		A88406E0245362CA00C7913A /* PhotoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88406DF245362CA00C7913A /* PhotoController.swift */; };
 		A88406E22453703D00C7913A /* ChoosePhotoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88406E12453703D00C7913A /* ChoosePhotoController.swift */; };
 		A8C66AEA245397E5006D7228 /* LeckerliOne-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = A8C66AE8245397C5006D7228 /* LeckerliOne-Regular.otf */; };
@@ -26,6 +27,7 @@
 		A8224F9124547D3600D8FF4F /* TitleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleCell.swift; sourceTree = "<group>"; };
 		A8224F992454B75100D8FF4F /* AlbumSelectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumSelectionCell.swift; sourceTree = "<group>"; };
 		A8224F9B2454B76600D8FF4F /* DownloadSelectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadSelectionCell.swift; sourceTree = "<group>"; };
+		A8224F9D2454CE9E00D8FF4F /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		A88406DF245362CA00C7913A /* PhotoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoController.swift; sourceTree = "<group>"; };
 		A88406E12453703D00C7913A /* ChoosePhotoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoosePhotoController.swift; sourceTree = "<group>"; };
 		A8C66AE8245397C5006D7228 /* LeckerliOne-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "LeckerliOne-Regular.otf"; sourceTree = "<group>"; };
@@ -108,6 +110,7 @@
 				A8D9890924476BF00022869D /* Main.storyboard */,
 				A8D9890E24476BF30022869D /* LaunchScreen.storyboard */,
 				A8D9891124476BF30022869D /* Info.plist */,
+				A8224F9D2454CE9E00D8FF4F /* Network.swift */,
 			);
 			path = AR_Painting;
 			sourceTree = "<group>";
@@ -190,6 +193,7 @@
 				A88406E0245362CA00C7913A /* PhotoController.swift in Sources */,
 				A8D9890824476BF00022869D /* ViewController.swift in Sources */,
 				A8224F9C2454B76600D8FF4F /* DownloadSelectionCell.swift in Sources */,
+				A8224F9E2454CE9E00D8FF4F /* Network.swift in Sources */,
 				A8C66AEC24539A8A006D7228 /* Design.swift in Sources */,
 				A88406E22453703D00C7913A /* ChoosePhotoController.swift in Sources */,
 				A8D9890424476BF00022869D /* AppDelegate.swift in Sources */,
