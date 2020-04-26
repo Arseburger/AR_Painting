@@ -10,10 +10,14 @@ import UIKit
 import SceneKit
 import ARKit
 
-class ViewController: UIViewController, ARSCNViewDelegate {
+protocol ViewControllerDelegate: class {
+  func update(image: UIImage?)
+}
+
+class ViewController: UIViewController, ARSCNViewDelegate, ViewControllerDelegate {
   
   var photoNode: SCNNode!
-  
+  var planeImage: UIImage? = UIImage(named: "B19C8B49-A81E-4760-8022-D60DB4C69C8C_1_105_c")
   
   @IBOutlet var sceneView: ARSCNView!
   @IBOutlet weak var upperView: UIView!
@@ -26,13 +30,19 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     self.initARSession()
     self.loadModel()
     self.configureViews()
-    sceneView.debugOptions = [.showWorldOrigin]
+    self.update(image: self.planeImage)
     
-    
-//    let scene = SCNScene(named: "art.scnassets/PictureScene.scn")!
-//    sceneView.scene = scene
-    
-    
+  }
+  
+  func updatePlaneNode(with image: UIImage) -> SCNNode {
+    let node = SCNNode(geometry: SCNPlane(width: 1.0, height: 1.0))
+    node.geometry?.firstMaterial?.diffuse.contents = self.planeImage
+    return node
+  }
+  
+  
+  func update(image: UIImage?) {
+    self.planeImage = image
   }
   
   func initScene() {
@@ -61,7 +71,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   
   func configureViews() {
     upperView.backgroundColor = customBlueColor
-//    lowerView.backgroundColor = customPinkColor
     label.textColor = customPinkColor
   }
   
@@ -126,16 +135,25 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     sceneView.session.pause()
   }
   
-
-  
   func session(_ session: ARSession, didFailWithError error: Error) {
-    
   }
   
   func sessionWasInterrupted(_ session: ARSession) {
   }
   
   func sessionInterruptionEnded(_ session: ARSession) {
+  }
+  
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    guard segue.identifier == "passImage" else {
+      return
+    }
+    guard let destination = segue.destination as? PhotoController else {
+      return
+    }
+    
+    let picture = self.sceneView.snapshot()
+    destination.image = picture
   }
   
 }

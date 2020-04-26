@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import PhotosUI
+import Photos
 
 class ChoosePhotoController: UIViewController {
   
@@ -50,7 +50,7 @@ extension ChoosePhotoController: UITableViewDelegate, UITableViewDataSource {
     case 0:
       let cell = tableView.dequeueReusableCell(withIdentifier: "DownloadTitle", for: indexPath) as! TitleCell
         cell.textLabel?.text = "Загрузить случайное фото"
-        cell.textLabel?.font = UIFont(name: "LeckerliOne-Regular.otf", size: 17.0)
+        cell.textLabel?.font = UIFont.systemFont(ofSize: 22.0, weight: .bold)
         return cell 
     case 1:
       let cell = tableView.dequeueReusableCell(withIdentifier: "DownloadSelection", for: indexPath) as! DownloadSelectionCell
@@ -58,7 +58,7 @@ extension ChoosePhotoController: UITableViewDelegate, UITableViewDataSource {
     case 2:
       let cell = tableView.dequeueReusableCell(withIdentifier: "AlbumTitle", for: indexPath) as! TitleCell
       cell.textLabel?.text = "Выбрать фото из галереи"
-      cell.textLabel?.font = UIFont(name: "LeckerliOne-Regular.otf", size: 17.0)
+      cell.textLabel?.font = UIFont.systemFont(ofSize: 22.0, weight: .bold)
       return cell
     case 3:
       let cell = tableView.dequeueReusableCell(withIdentifier: "AlbumSelection", for: indexPath) as! AlbumSelectionCell
