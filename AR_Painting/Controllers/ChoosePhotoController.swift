@@ -11,6 +11,8 @@ import Photos
 
 class ChoosePhotoController: UIViewController {
   
+  var image: UIImage?
+  
   @IBOutlet weak var topView: UIView!
   @IBOutlet weak var button: UIButton!
   @IBOutlet weak var tableView: UITableView!
@@ -24,16 +26,15 @@ class ChoosePhotoController: UIViewController {
     configureViews()
     tableView.dataSource = self
     tableView.delegate = self
-    tableView.register(TitleCell.self, forCellReuseIdentifier: "DownloadTitle")
-    tableView.register(DownloadSelectionCell.self, forCellReuseIdentifier: "DownloadSelection")
-    tableView.register(TitleCell.self, forCellReuseIdentifier: "AlbumTitle")
-    tableView.register(AlbumSelectionCell.self, forCellReuseIdentifier: "AlbumSelection")
+    tableView.rowHeight = UITableView.automaticDimension
     tableView.separatorStyle = .none
   }
   
   func configureViews() {
     topView.backgroundColor = customBlueColor
     button.backgroundColor = customPinkColor
+    button.isEnabled = false
+    
   }
   
 }
@@ -41,28 +42,32 @@ class ChoosePhotoController: UIViewController {
 extension ChoosePhotoController: UITableViewDelegate, UITableViewDataSource {
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-     4
-   }
-   
+    return 4
+  }
+  
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     
     switch indexPath.row {
     case 0:
-      let cell = tableView.dequeueReusableCell(withIdentifier: "DownloadTitle", for: indexPath) as! TitleCell
-        cell.textLabel?.text = "Загрузить случайное фото"
-        cell.textLabel?.font = UIFont.systemFont(ofSize: 22.0, weight: .bold)
-        return cell 
+      let cell = tableView.dequeueReusableCell(withIdentifier: "titleCell", for: indexPath) as! TitleCell
+      cell.label?.text = "Загрузить случайное фото"
+      cell.label?.font = UIFont.systemFont(ofSize: 22.0, weight: .bold)
+      return cell
+      
     case 1:
-      let cell = tableView.dequeueReusableCell(withIdentifier: "DownloadSelection", for: indexPath) as! DownloadSelectionCell
+      let cell = tableView.dequeueReusableCell(withIdentifier: "downloadSelectionCell", for: indexPath) as! DownloadSelectionCell
       return cell
+      
     case 2:
-      let cell = tableView.dequeueReusableCell(withIdentifier: "AlbumTitle", for: indexPath) as! TitleCell
-      cell.textLabel?.text = "Выбрать фото из галереи"
-      cell.textLabel?.font = UIFont.systemFont(ofSize: 22.0, weight: .bold)
+      let cell = tableView.dequeueReusableCell(withIdentifier: "titleCell", for: indexPath) as! TitleCell
+      cell.label?.text = "Выбрать фото из галереи"
+      cell.label?.font = UIFont.systemFont(ofSize: 22.0, weight: .bold)
       return cell
+      
     case 3:
-      let cell = tableView.dequeueReusableCell(withIdentifier: "AlbumSelection", for: indexPath) as! AlbumSelectionCell
+      let cell = tableView.dequeueReusableCell(withIdentifier: "albumSelectionCell", for: indexPath) as! AlbumSelectionCell
       return cell
+      
     default:
       return UITableViewCell()
     }

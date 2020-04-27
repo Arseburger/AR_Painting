@@ -12,8 +12,8 @@ class TitleCell: UITableViewCell {
   
   @IBOutlet weak var label: UILabel!
   
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-
+  override func awakeFromNib() {
+    super.awakeFromNib()
+  }
+  
 }

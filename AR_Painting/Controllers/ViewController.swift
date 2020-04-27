@@ -17,11 +17,18 @@ protocol ViewControllerDelegate: class {
 class ViewController: UIViewController, ARSCNViewDelegate, ViewControllerDelegate {
   
   var photoNode: SCNNode!
-  var planeImage: UIImage? = UIImage(named: "B19C8B49-A81E-4760-8022-D60DB4C69C8C_1_105_c")
+  var planeImage: UIImage? = UIImage(named: "art.scnassets/B19C8B49-A81E-4760-8022-D60DB4C69C8C_1_105_c.jpeg")
   
   @IBOutlet var sceneView: ARSCNView!
   @IBOutlet weak var upperView: UIView!
   @IBOutlet weak var label: UILabel!
+  
+  @IBAction func test(_ sender: Any) {
+    self.update(image: UIImage(named: "art.scnassets/3623_20.jpg"))
+    self.loadModel()
+    print("Button pressed")
+  }
+  
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -31,13 +38,11 @@ class ViewController: UIViewController, ARSCNViewDelegate, ViewControllerDelegat
     self.loadModel()
     self.configureViews()
     self.update(image: self.planeImage)
-    
+    self.updatePlaneNode()
   }
   
-  func updatePlaneNode(with image: UIImage) -> SCNNode {
-    let node = SCNNode(geometry: SCNPlane(width: 1.0, height: 1.0))
-    node.geometry?.firstMaterial?.diffuse.contents = self.planeImage
-    return node
+  func updatePlaneNode() {
+    
   }
   
   
@@ -125,6 +130,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ViewControllerDelegat
   func loadModel() {
     let photoScene = SCNScene(named: "art.scnassets/PictureScene.scn")!
     photoNode = photoScene.rootNode.childNode(withName: "photo", recursively: false)
+    photoNode!.geometry?.firstMaterial?.diffuse.contents = self.planeImage
+    photoNode!.isHidden = false
     sceneView.scene.rootNode.addChildNode(photoNode)
   }
   
