@@ -9,11 +9,12 @@
 /* Begin PBXBuildFile section */
 		A8224F9224547D3600D8FF4F /* TitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8224F9124547D3600D8FF4F /* TitleCell.swift */; };
 		A8224F9A2454B75100D8FF4F /* AlbumSelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8224F992454B75100D8FF4F /* AlbumSelectionCell.swift */; };
-		A8224F9E2454CE9E00D8FF4F /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8224F9D2454CE9E00D8FF4F /* Network.swift */; };
 		A88406E0245362CA00C7913A /* PhotoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88406DF245362CA00C7913A /* PhotoController.swift */; };
 		A88406E22453703D00C7913A /* ChoosePhotoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88406E12453703D00C7913A /* ChoosePhotoController.swift */; };
-		A8C66AEA245397E5006D7228 /* LeckerliOne-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = A8C66AE8245397C5006D7228 /* LeckerliOne-Regular.otf */; };
-		A8C66AEC24539A8A006D7228 /* Design.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C66AEB24539A8A006D7228 /* Design.swift */; };
+		A894998F245C63F100119108 /* NetworkConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A894998E245C63F100119108 /* NetworkConstants.swift */; };
+		A8949992245C650100119108 /* BaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8949991245C650100119108 /* BaseService.swift */; };
+		A8949994245C6C7F00119108 /* PhotoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8949993245C6C7F00119108 /* PhotoModel.swift */; };
+		A894999E245C7EFB00119108 /* Design.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8949999245C75D600119108 /* Design.swift */; };
 		A8D9890424476BF00022869D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D9890324476BF00022869D /* AppDelegate.swift */; };
 		A8D9890624476BF00022869D /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = A8D9890524476BF00022869D /* art.scnassets */; };
 		A8D9890824476BF00022869D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D9890724476BF00022869D /* ViewController.swift */; };
@@ -27,11 +28,13 @@
 /* Begin PBXFileReference section */
 		A8224F9124547D3600D8FF4F /* TitleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleCell.swift; sourceTree = "<group>"; };
 		A8224F992454B75100D8FF4F /* AlbumSelectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumSelectionCell.swift; sourceTree = "<group>"; };
-		A8224F9D2454CE9E00D8FF4F /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		A88406DF245362CA00C7913A /* PhotoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoController.swift; sourceTree = "<group>"; };
 		A88406E12453703D00C7913A /* ChoosePhotoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoosePhotoController.swift; sourceTree = "<group>"; };
-		A8C66AE8245397C5006D7228 /* LeckerliOne-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "LeckerliOne-Regular.otf"; sourceTree = "<group>"; };
-		A8C66AEB24539A8A006D7228 /* Design.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Design.swift; sourceTree = "<group>"; };
+		A894998E245C63F100119108 /* NetworkConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConstants.swift; sourceTree = "<group>"; };
+		A8949991245C650100119108 /* BaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseService.swift; sourceTree = "<group>"; };
+		A8949993245C6C7F00119108 /* PhotoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModel.swift; sourceTree = "<group>"; };
+		A8949998245C75D600119108 /* LeckerliOne-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "LeckerliOne-Regular.otf"; sourceTree = "<group>"; };
+		A8949999245C75D600119108 /* Design.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Design.swift; sourceTree = "<group>"; };
 		A8D9890024476BF00022869D /* AR_Painting.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AR_Painting.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8D9890324476BF00022869D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A8D9890524476BF00022869D /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -55,13 +58,46 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A894998D245C63BF00119108 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A894998E245C63F100119108 /* NetworkConstants.swift */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		A8949990245C64DF00119108 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A8949991245C650100119108 /* BaseService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A8949996245C75C000119108 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				A8949993245C6C7F00119108 /* PhotoModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		A8949997245C75D600119108 /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				A8949998245C75D600119108 /* LeckerliOne-Regular.otf */,
+				A8949999245C75D600119108 /* Design.swift */,
+			);
+			path = Design;
+			sourceTree = "<group>";
+		};
 		A8C66AED2453A1B8006D7228 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
 				A8224F9124547D3600D8FF4F /* TitleCell.swift */,
 				A8E483E224575ED300AC98D7 /* PhotoCollectionCell.swift */,
-				A8E483E0245754EC00AC98D7 /* DownloadSelectionCell.swift */,
 				A8224F992454B75100D8FF4F /* AlbumSelectionCell.swift */,
+				A8E483E0245754EC00AC98D7 /* DownloadSelectionCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -74,15 +110,6 @@
 				A88406E12453703D00C7913A /* ChoosePhotoController.swift */,
 			);
 			path = Controllers;
-			sourceTree = "<group>";
-		};
-		A8C66AEF2453A1E2006D7228 /* Design */ = {
-			isa = PBXGroup;
-			children = (
-				A8C66AEB24539A8A006D7228 /* Design.swift */,
-				A8C66AE8245397C5006D7228 /* LeckerliOne-Regular.otf */,
-			);
-			path = Design;
 			sourceTree = "<group>";
 		};
 		A8D988F724476BF00022869D = {
@@ -104,16 +131,18 @@
 		A8D9890224476BF00022869D /* AR_Painting */ = {
 			isa = PBXGroup;
 			children = (
-				A8C66AEF2453A1E2006D7228 /* Design */,
 				A8D9890C24476BF30022869D /* Assets.xcassets */,
 				A8D9890524476BF00022869D /* art.scnassets */,
+				A8949997245C75D600119108 /* Design */,
+				A8949996245C75C000119108 /* Model */,
+				A8949990245C64DF00119108 /* Services */,
+				A894998D245C63BF00119108 /* Resources */,
 				A8C66AEE2453A1C6006D7228 /* Controllers */,
 				A8C66AED2453A1B8006D7228 /* Cells */,
 				A8D9890324476BF00022869D /* AppDelegate.swift */,
 				A8D9890924476BF00022869D /* Main.storyboard */,
 				A8D9890E24476BF30022869D /* LaunchScreen.storyboard */,
 				A8D9891124476BF30022869D /* Info.plist */,
-				A8224F9D2454CE9E00D8FF4F /* Network.swift */,
 			);
 			path = AR_Painting;
 			sourceTree = "<group>";
@@ -176,7 +205,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A8C66AEA245397E5006D7228 /* LeckerliOne-Regular.otf in Resources */,
 				A8D9890624476BF00022869D /* art.scnassets in Resources */,
 				A8D9891024476BF30022869D /* LaunchScreen.storyboard in Resources */,
 				A8D9890D24476BF30022869D /* Assets.xcassets in Resources */,
@@ -191,15 +219,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A894998F245C63F100119108 /* NetworkConstants.swift in Sources */,
 				A8224F9224547D3600D8FF4F /* TitleCell.swift in Sources */,
 				A8224F9A2454B75100D8FF4F /* AlbumSelectionCell.swift in Sources */,
 				A88406E0245362CA00C7913A /* PhotoController.swift in Sources */,
 				A8D9890824476BF00022869D /* ViewController.swift in Sources */,
 				A8E483E324575ED300AC98D7 /* PhotoCollectionCell.swift in Sources */,
-				A8224F9E2454CE9E00D8FF4F /* Network.swift in Sources */,
-				A8C66AEC24539A8A006D7228 /* Design.swift in Sources */,
+				A8949992245C650100119108 /* BaseService.swift in Sources */,
 				A8E483E1245754EC00AC98D7 /* DownloadSelectionCell.swift in Sources */,
 				A88406E22453703D00C7913A /* ChoosePhotoController.swift in Sources */,
+				A894999E245C7EFB00119108 /* Design.swift in Sources */,
+				A8949994245C6C7F00119108 /* PhotoModel.swift in Sources */,
 				A8D9890424476BF00022869D /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -276,7 +306,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -330,7 +360,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
