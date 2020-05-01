@@ -9,8 +9,26 @@
 import UIKit
 
 class DownloadSelectionCell: UITableViewCell {
-
+  
+  var photo: UIImage?
+  
   @IBOutlet weak var button: UIButton!
+  @IBAction func getRandomPhotoFromUnsplash(_ sender: Any) {
+    
+    let service = BaseService()
+    service.loadRandomPhoto(onComplete: { photos in
+      DispatchQueue.global().async {
+        let url = URL(string: (photos.urls.regular))
+        let data = try? Data(contentsOf: url!)
+        self.photo = UIImage(data: data!)!
+        print(self.photo)
+      }
+    })
+    { error in print("mimo") }
+    
+    
+    
+  }
   
   override func awakeFromNib() {
     super.awakeFromNib()
@@ -18,11 +36,17 @@ class DownloadSelectionCell: UITableViewCell {
     button.layer.borderWidth = 0.5
     button.layer.borderColor = UIColor.lightGray.cgColor
     button.setBackgroundImage(UIImage(named: "UnsplashLogo"), for: .normal)
-    button.setBackgroundImage(UIImage(named: "UnsplashLogo"), for: .selected)
-    button.setBackgroundImage(UIImage(named: "UnsplashLogo"), for: .highlighted)
-    button.setBackgroundImage(UIImage(named: "UnsplashLogo"), for: .focused)
+    button.setBackgroundImage(UIImage(named: "UnsplashLogoHighlited"), for: .highlighted)
   }
-
+  
+  func showLoading() {
+    
+  }
+  
+//  func showComplete() -> UIView{
+//    let complete = UIView(frame: <#T##CGRect#>)
+//    return complete
+//  }
   
   
 }

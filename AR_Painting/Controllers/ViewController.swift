@@ -9,46 +9,81 @@
 import UIKit
 import SceneKit
 import ARKit
+import CoreGraphics
 
-protocol ViewControllerDelegate: class {
-  func update(image: UIImage?)
-}
-
-class ViewController: UIViewController, ARSCNViewDelegate, ViewControllerDelegate {
+class ViewController: UIViewController, ARSCNViewDelegate {
   
   var photoNode: SCNNode!
   var planeImage: UIImage? = UIImage(named: "art.scnassets/B19C8B49-A81E-4760-8022-D60DB4C69C8C_1_105_c.jpeg")
+  var sceneHasPicture: Bool = false
   
   @IBOutlet var sceneView: ARSCNView!
   @IBOutlet weak var upperView: UIView!
   @IBOutlet weak var label: UILabel!
+  @IBOutlet weak var testButton: UIButton!
   
   @IBAction func test(_ sender: Any) {
-    self.update(image: UIImage(named: "art.scnassets/3623_20.jpg"))
-    self.loadModel()
+    self.update(image: self.planeImage == UIImage(named: "art.scnassets/3623_20.jpg") ? UIImage(named: "art.scnassets/B19C8B49-A81E-4760-8022-D60DB4C69C8C_1_105_c.jpeg") : UIImage(named: "art.scnassets/3623_20.jpg"))
     print("Button pressed")
   }
   
+  @IBAction func saveNewImage(_ unwindSegue: UIStoryboardSegue) {
+    guard unwindSegue.identifier == "passPhoto" else {
+      return
+    }
+    guard let source = unwindSegue.source as? ChoosePhotoController else {
+      return
+    }
+    self.planeImage = source.image
+  }
+  
+  @IBAction func swipeUpGestureHandler(_ sender: Any) {
+    guard let frame = self.sceneView.session.currentFrame else {
+      return
+    }
+    guard !self.sceneHasPicture else {
+      return
+    }
+    self.applyImage(transform: SCNMatrix4(frame.camera.transform), offset: SCNVector3(x: 0.0, y: 0.0, z: -2.0))
+    self.sceneHasPicture = true
+    print("+")
+  }
+  
+  @IBAction func swipeDownGestureHandler(_ sender: Any) {
+    guard self.sceneHasPicture else {
+      return
+    }
+//    print("-", sceneView.scene.rootNode.childNodes[0], "\n" , sceneView.scene.rootNode.childNodes[1], "\n" , sceneView.scene.rootNode.childNodes[2])
+    self.sceneView.scene.rootNode.childNode(withName: "picturePlane", recursively: false)?.removeFromParentNode()
+    self.sceneHasPicture = false
+//    print(sceneView.scene.rootNode.childNodes.count)
+  }
   
   override func viewDidLoad() {
     super.viewDidLoad()
     self.initSceneView()
     self.initScene()
     self.initARSession()
-    self.loadModel()
-    self.configureViews()
     self.update(image: self.planeImage)
+    self.configureViews()
     self.updatePlaneNode()
+//    print(self.planeImage)
+//    print(self.planeImage?.size)
   }
   
-  func updatePlaneNode() {
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
     
+    let configuration = ARWorldTrackingConfiguration()
+    sceneView.session.run(configuration)
   }
   
-  
-  func update(image: UIImage?) {
-    self.planeImage = image
+  override func viewWillDisappear(_ animated: Bool) {
+    super.viewWillDisappear(animated)
+    
+    sceneView.session.pause()
   }
+  
   
   func initScene() {
     let scene = SCNScene()
@@ -74,33 +109,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ViewControllerDelegat
 
   }
   
-  func configureViews() {
-    upperView.backgroundColor = customBlueColor
-    label.textColor = customPinkColor
-  }
-  
-  override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
-
-    let configuration = ARWorldTrackingConfiguration()
-    sceneView.session.run(configuration)
-  }
-  
-  func createARPlaneNode(planeAnchor: ARPlaneAnchor, color: UIColor) -> SCNNode {
-    let planeGeometry = SCNPlane(width: CGFloat(planeAnchor.extent.x), height: CGFloat(planeAnchor.extent.y))
-    
-    let planeMaterial = SCNMaterial()
-    planeMaterial.diffuse.contents = "art.scnassets/Surface_Diffuse.png"
-    planeGeometry.materials = [planeMaterial]
-    
-    let planeNode = SCNNode(geometry: planeGeometry)
-    planeNode.position = SCNVector3Make(planeAnchor.extent.x, planeAnchor.extent.y, 0)
-    
-    planeNode.transform = SCNMatrix4MakeRotation(-Float.pi / 2, 0, 1, 0)
-    return planeNode
-    
-  }
-  
   func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
     guard let planeAnchor = anchor as? ARPlaneAnchor else {
       return
@@ -120,11 +128,75 @@ class ViewController: UIViewController, ARSCNViewDelegate, ViewControllerDelegat
     }
   }
   
+  func session(_ session: ARSession, didFailWithError error: Error) {
+  }
+  
+  func sessionWasInterrupted(_ session: ARSession) {
+  }
+  
+  func sessionInterruptionEnded(_ session: ARSession) {
+  }
+  
+}
+
+extension ViewController {
+  
+  func createARPlaneNode(planeAnchor: ARPlaneAnchor, color: UIColor) -> SCNNode {
+    let planeGeometry = SCNPlane(width: CGFloat(planeAnchor.extent.x), height: CGFloat(planeAnchor.extent.y))
+    
+    let planeMaterial = SCNMaterial()
+    planeMaterial.diffuse.contents = "art.scnassets/Surface_Diffuse.png"
+    planeGeometry.materials = [planeMaterial]
+    
+    let planeNode = SCNNode(geometry: planeGeometry)
+    planeNode.position = SCNVector3Make(planeAnchor.extent.x, planeAnchor.extent.y, 0)
+    
+    planeNode.transform = SCNMatrix4MakeRotation(-Float.pi / 2, 0, 1, 0)
+    return planeNode
+    
+  }
+  
   func updatePlaneNode(planeNode: SCNNode, planeAnchor: ARPlaneAnchor) {
     let planeGeometry = planeNode.geometry as! SCNPlane
     planeGeometry.width = CGFloat(planeAnchor.extent.x)
     planeGeometry.height = CGFloat(planeAnchor.extent.y)
     planeNode.position = SCNVector3Make(planeAnchor.extent.x, planeAnchor.extent.y, 0)
+  }
+  
+  func applyImage(transform: SCNMatrix4, offset: SCNVector3) {
+    
+    guard let image = self.planeImage else {
+      return
+    }
+    
+    let position = SCNVector3(transform.m41 + offset.x,
+                              transform.m42 + offset.y,
+                              transform.m43 + offset.z)
+    
+    let width = self.planeImage?.size.width
+    let height = self.planeImage?.size.height
+    let maxMeasure = CGFloat(max(width!, height!))
+    
+    let material = SCNMaterial()
+    material.diffuse.contents = self.planeImage
+    
+    let geometry = SCNPlane(width: width! / maxMeasure, height: height! / maxMeasure)
+    geometry.materials = [material]
+    
+    let imageNode = SCNNode(geometry: geometry)
+    imageNode.position = position
+    imageNode.name = "picturePlane"
+    
+    sceneView.scene.rootNode.addChildNode(imageNode)
+    
+  }
+  
+  func updatePlaneNode() {
+    
+  }
+  
+  func update(image: UIImage?) {
+    self.planeImage = image
   }
   
   func loadModel() {
@@ -133,22 +205,15 @@ class ViewController: UIViewController, ARSCNViewDelegate, ViewControllerDelegat
     photoNode!.geometry?.firstMaterial?.diffuse.contents = self.planeImage
     photoNode!.isHidden = false
     sceneView.scene.rootNode.addChildNode(photoNode)
+//    sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
+//      node.removeFromParentNode()
+//    }
   }
   
-  
-  override func viewWillDisappear(_ animated: Bool) {
-    super.viewWillDisappear(animated)
-
-    sceneView.session.pause()
-  }
-  
-  func session(_ session: ARSession, didFailWithError error: Error) {
-  }
-  
-  func sessionWasInterrupted(_ session: ARSession) {
-  }
-  
-  func sessionInterruptionEnded(_ session: ARSession) {
+  func configureViews() {
+    upperView.backgroundColor = CustomColors.blue
+    label.textColor = CustomColors.pink
+    testButton.layer.cornerRadius = 30
   }
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -162,5 +227,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ViewControllerDelegat
     let picture = self.sceneView.snapshot()
     destination.image = picture
   }
+  
   
 }

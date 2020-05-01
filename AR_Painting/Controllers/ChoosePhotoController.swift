@@ -27,14 +27,9 @@ class ChoosePhotoController: UIViewController {
     tableView.dataSource = self
     tableView.delegate = self
     tableView.rowHeight = UITableView.automaticDimension
+    tableView.contentInsetAdjustmentBehavior = .never
     tableView.separatorStyle = .none
-  }
-  
-  func configureViews() {
-    topView.backgroundColor = customBlueColor
-    button.backgroundColor = customPinkColor
-    button.isEnabled = false
-    
+    tableView.isScrollEnabled = false
   }
   
 }
@@ -67,10 +62,35 @@ extension ChoosePhotoController: UITableViewDelegate, UITableViewDataSource {
     case 3:
       let cell = tableView.dequeueReusableCell(withIdentifier: "albumSelectionCell", for: indexPath) as! AlbumSelectionCell
       return cell
-      
+
     default:
       return UITableViewCell()
     }
+  }
+  
+  func getUnsplashImage() {
+    let indexPath = IndexPath(row: 1, section: 0)
+    guard let cell = tableView.cellForRow(at: indexPath) as? DownloadSelectionCell else {
+      return
+    }
+    self.image = cell.photo
+    self.button.isEnabled = true
+  }
+  
+}
+
+extension ChoosePhotoController {
+  
+  func configureViews() {
+    topView.backgroundColor = CustomColors.blue
+    button.backgroundColor = CustomColors.pink
+    button.setTitle("Выберите изображение", for: .disabled)
+    button.setTitle("Готово", for: .normal)
+//    button.isEnabled = false
+  }
+  
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    self.getUnsplashImage()
   }
   
 }

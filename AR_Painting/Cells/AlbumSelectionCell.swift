@@ -7,20 +7,30 @@
 //
 
 import UIKit
+import Photos
 
 class AlbumSelectionCell: UITableViewCell {
+  
+  private var userAlbums: PHFetchResult<PHAssetCollection>?
+  private var userFavorites: PHFetchResult<PHAssetCollection>?
   
   @IBOutlet weak var collectionView: UICollectionView!
   
   override func awakeFromNib() {
     super.awakeFromNib()
+    collectionView.dataSource = self
+    collectionView.delegate = self
+    collectionView.frame = self.frame
+    collectionView.isScrollEnabled = true
+//    self.fetchCollections()
   }
   
 }
 
-extension AlbumSelectionCell: UICollectionViewDelegate, UICollectionViewDataSource {
+extension AlbumSelectionCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+  
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return 1
+    return 100
   }
   
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -28,5 +38,26 @@ extension AlbumSelectionCell: UICollectionViewDelegate, UICollectionViewDataSour
     return cell
   }
   
+  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    return CGSize(width: 118.0, height: 118.0)
+  }
+  
+}
+
+extension AlbumSelectionCell {
+  
+  func fetchCollections() {
+    if let albums = PHCollectionList.fetchTopLevelUserCollections(with: nil) as? PHFetchResult<PHAssetCollection> {
+      userAlbums = albums
+    }
+    
+    let options = PHFetchOptions()
+    options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
+    
+    let assets: PHFetchResult<PHAsset> = PHAsset.fetchAssets(in: (userAlbums?.firstObject)!, options: options)
+    print(assets.count)
+
+    
+  }
   
 }

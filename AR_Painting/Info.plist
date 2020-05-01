@@ -23,7 +23,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string></string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Grant access to photos so we could save your pictures.</string>
+	<string>Grant access to photos so we could save your pictures or load photos from your camera roll.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>LeckerliOne-Regular.otf</string>

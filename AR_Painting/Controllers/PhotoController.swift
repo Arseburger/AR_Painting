@@ -58,12 +58,11 @@ class PhotoController: UIViewController {
   }
   
   func configureViews() {
-    topView.backgroundColor = customBlueColor
-    bottomView.backgroundColor = customPinkColor
+    topView.backgroundColor = CustomColors.blue
+    bottomView.backgroundColor = CustomColors.pink
   }
   
   func showCompletedAlert() -> UIViewController {
-    
     let alert = UIAlertController(title: "Успешно", message: "Фоторгафия была сохранена в библиотеку.", preferredStyle: .actionSheet)
     alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
     return alert
