@@ -21,6 +21,11 @@ class PhotoController: UIViewController {
     self.savePhoto()
   }
   
+  @IBAction func share(_ sender: Any) {
+    let activityController = UIActivityViewController(activityItems: [self.image!], applicationActivities: nil)
+    self.present(activityController, animated: true, completion: nil)
+  }
+  
   @IBOutlet weak var photoView: UIImageView!
   @IBOutlet weak var bottomView: UIView!
   @IBOutlet weak var topView: UIView!

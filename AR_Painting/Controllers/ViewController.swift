@@ -165,13 +165,9 @@ extension ViewController {
   
   func applyImage(transform: SCNMatrix4, offset: SCNVector3) {
     
-    guard let image = self.planeImage else {
-      return
-    }
-    
     let position = SCNVector3(transform.m41 + offset.x,
-                              transform.m42 + offset.y,
-                              transform.m43 + offset.z)
+                            transform.m42 + offset.y,
+                            transform.m43 + offset.z)
     
     let width = self.planeImage?.size.width
     let height = self.planeImage?.size.height
@@ -213,6 +209,7 @@ extension ViewController {
   func configureViews() {
     upperView.backgroundColor = CustomColors.blue
     label.textColor = CustomColors.pink
+    label.font = leckerliOne
     testButton.layer.cornerRadius = 30
   }
   

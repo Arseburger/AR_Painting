@@ -9,13 +9,21 @@
 import UIKit
 import Photos
 
+
 class ChoosePhotoController: UIViewController {
+  
+  let dataSource = DataSource()
+  let delegate = CollectionViewDelegate(numberOfItemsPerRow: 5, interItemSpacing: 10)
   
   var image: UIImage?
   
   @IBOutlet weak var topView: UIView!
   @IBOutlet weak var button: UIButton!
-  @IBOutlet weak var tableView: UITableView!
+  @IBOutlet weak var collectionView: UICollectionView!
+  @IBOutlet weak var bottomView: UIView!
+  
+  @IBOutlet weak var overlayView: UIView!
+  @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
   
   @IBAction func close(_ sender: Any) {
     self.dismiss(animated: true, completion: nil)
@@ -24,57 +32,8 @@ class ChoosePhotoController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     configureViews()
-    tableView.dataSource = self
-    tableView.delegate = self
-    tableView.rowHeight = UITableView.automaticDimension
-    tableView.contentInsetAdjustmentBehavior = .never
-    tableView.separatorStyle = .none
-    tableView.isScrollEnabled = false
-  }
-  
-}
-
-extension ChoosePhotoController: UITableViewDelegate, UITableViewDataSource {
-  
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return 4
-  }
-  
-  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    
-    switch indexPath.row {
-    case 0:
-      let cell = tableView.dequeueReusableCell(withIdentifier: "titleCell", for: indexPath) as! TitleCell
-      cell.label?.text = "Загрузить случайное фото"
-      cell.label?.font = UIFont.systemFont(ofSize: 22.0, weight: .bold)
-      return cell
-      
-    case 1:
-      let cell = tableView.dequeueReusableCell(withIdentifier: "downloadSelectionCell", for: indexPath) as! DownloadSelectionCell
-      return cell
-      
-    case 2:
-      let cell = tableView.dequeueReusableCell(withIdentifier: "titleCell", for: indexPath) as! TitleCell
-      cell.label?.text = "Выбрать фото из галереи"
-      cell.label?.font = UIFont.systemFont(ofSize: 22.0, weight: .bold)
-      return cell
-      
-    case 3:
-      let cell = tableView.dequeueReusableCell(withIdentifier: "albumSelectionCell", for: indexPath) as! AlbumSelectionCell
-      return cell
-
-    default:
-      return UITableViewCell()
-    }
-  }
-  
-  func getUnsplashImage() {
-    let indexPath = IndexPath(row: 1, section: 0)
-    guard let cell = tableView.cellForRow(at: indexPath) as? DownloadSelectionCell else {
-      return
-    }
-    self.image = cell.photo
-    self.button.isEnabled = true
+    collectionView.dataSource = dataSource
+    collectionView.delegate = delegate
   }
   
 }
@@ -83,14 +42,50 @@ extension ChoosePhotoController {
   
   func configureViews() {
     topView.backgroundColor = CustomColors.blue
-    button.backgroundColor = CustomColors.pink
+    button.backgroundColor = UIColor.white
+    button.layer.cornerRadius = 10
+    button.setTitleColor(UIColor.lightGray, for: .disabled)
+    button.setTitleColor(CustomColors.blue, for: .normal)
     button.setTitle("Выберите изображение", for: .disabled)
     button.setTitle("Готово", for: .normal)
-//    button.isEnabled = false
+    button.isEnabled = true
+    overlayView.isHidden = true
+    activityIndicator.isHidden = true
+  }
+  
+  func showLoadingState() {
+    self.activityIndicator.isHidden = false
+    self.overlayView.isHidden = false
+    self.activityIndicator.startAnimating()
+    self.button.isEnabled = false
+    self.button.setTitle("Загрузка", for: .disabled)
+    self.view.bringSubviewToFront(overlayView)
+  }
+  
+  func getRandomPhoto() -> UIImage {
+    var image = UIImage()
+    let service = BaseService()
+    self.showLoadingState()
+    service.loadRandomPhoto(onComplete: { photos in
+      DispatchQueue.global().async {
+        let url = URL(string: (photos.urls.regular))
+        let data = try? Data(contentsOf: url!)
+        image = UIImage(data: data!)!
+      }
+    }) { error in print("mimo") }
+    return image
+  }
+  
+  func getUserImages() -> PHFetchResult<PHAsset> {
+    let options = PHFetchOptions()
+    options.predicate = NSPredicate(format: "mediatype == %d", PHAssetMediaType.image.rawValue)
+    options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+    let images = PHAsset.fetchAssets(with: options)
+    print(images.count)
+    return images
   }
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    self.getUnsplashImage()
+        self.image = self.getRandomPhoto()
   }
-  
 }
