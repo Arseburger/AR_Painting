@@ -236,12 +236,12 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="88"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bwX-fZ-eEE">
-                                        <rect key="frame" x="8" y="50" width="48" height="30"/>
+                                        <rect key="frame" x="8" y="50" width="64" height="30"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="48" id="eeN-NV-rdG"/>
+                                            <constraint firstAttribute="width" constant="64" id="eeN-NV-rdG"/>
                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="48" id="efi-o3-eeP"/>
                                         </constraints>
-                                        <state key="normal" title="Cancel">
+                                        <state key="normal" title="Закрыть">
                                             <color key="titleColor" red="0.8862745098" green="0.75294117650000003" blue="0.79215686269999996" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
@@ -276,6 +276,9 @@
                                         <state key="normal" title="Готово">
                                             <color key="titleColor" red="0.36470588240000001" green="0.54117647059999996" blue="0.65490196079999996" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
+                                        <connections>
+                                            <action selector="showLoader:" destination="Imp-RR-mCS" eventType="touchUpInside" id="cR9-Ob-Q3W"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.8862745098" green="0.75294117650000003" blue="0.79215686269999996" alpha="1" colorSpace="calibratedRGB"/>
@@ -287,7 +290,7 @@
                                     <constraint firstAttribute="trailing" secondItem="rEk-kS-Me1" secondAttribute="trailing" constant="20" id="aaB-vR-xsO"/>
                                 </constraints>
                             </view>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="kZZ-66-3xq">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="kZZ-66-3xq">
                                 <rect key="frame" x="0.0" y="96" width="414" height="706"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="qub-oR-JYJ">

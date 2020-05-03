@@ -17,10 +17,6 @@ class PhotoController: UIViewController {
     self.dismiss(animated: true, completion: nil)
   }
   
-  @IBAction func savePhoto(_ sender: Any) {
-    self.savePhoto()
-  }
-  
   @IBAction func share(_ sender: Any) {
     let activityController = UIActivityViewController(activityItems: [self.image!], applicationActivities: nil)
     self.present(activityController, animated: true, completion: nil)

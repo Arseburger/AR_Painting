@@ -27,14 +27,14 @@ class DataSource: NSObject, UICollectionViewDataSource {
     }
     
     let category = items.sections[indexPath.section]
-    let image = self.items.data[category]?[indexPath.item] ?? UIImage(named: "NoImage")
+    let image = self.items.data[category]?[indexPath.item] ?? (UIImage(named: "NoImage"), nil)
     
-    cell.imageView.image = image
-    if indexPath.section == 0 {
-      cell.imageView.layer.borderColor = UIColor.lightGray.cgColor
-      cell.imageView.layer.borderWidth = 1.0
-      cell.imageView.layer.cornerRadius = cell.frame.width * 0.5
-    }
+    cell.imageView.image = image.0
+//    if indexPath.section == 0 {
+//      cell.imageView.layer.borderColor = UIColor.lightGray.cgColor
+//      cell.imageView.layer.borderWidth = 1.0
+//      cell.imageView.layer.cornerRadius = cell.frame.width * 0.5
+//    }
     return cell
     
   }

@@ -17,6 +17,7 @@ class PhotoCollectionCell: UICollectionViewCell {
   
   override func awakeFromNib() {
     super.awakeFromNib()
+//    self.layer.backgroundColor = UIColor.lightGray.cgColor
   }
   
   func getImage(from asset: PHAsset) -> UIImage? {

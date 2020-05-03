@@ -9,7 +9,6 @@
 import UIKit
 import Photos
 
-
 class ChoosePhotoController: UIViewController {
   
   let dataSource = DataSource()
@@ -29,11 +28,17 @@ class ChoosePhotoController: UIViewController {
     self.dismiss(animated: true, completion: nil)
   }
   
+  @IBAction func showLoader(_ sender: Any) {
+    showLoadingState()
+    print(Item.shared.getUserImages().count)
+  }
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     configureViews()
     collectionView.dataSource = dataSource
     collectionView.delegate = delegate
+    collectionView.reloadData()
   }
   
 }
@@ -74,15 +79,6 @@ extension ChoosePhotoController {
       }
     }) { error in print("mimo") }
     return image
-  }
-  
-  func getUserImages() -> PHFetchResult<PHAsset> {
-    let options = PHFetchOptions()
-    options.predicate = NSPredicate(format: "mediatype == %d", PHAssetMediaType.image.rawValue)
-    options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-    let images = PHAsset.fetchAssets(with: options)
-    print(images.count)
-    return images
   }
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

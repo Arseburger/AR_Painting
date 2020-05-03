@@ -27,12 +27,11 @@ class CollectionViewDelegate: NSObject, UICollectionViewDelegateFlowLayout {
   }
   
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-    return interItemSpacing
+    return interItemSpacing * 0.5
   }
   
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-    return UIEdgeInsets(top: interItemSpacing, left: interItemSpacing, bottom: interItemSpacing, right: interItemSpacing)
+    return UIEdgeInsets(top: interItemSpacing, left: interItemSpacing * 0.5, bottom: interItemSpacing, right: interItemSpacing * 0.5)
   }
-  
   
 }
