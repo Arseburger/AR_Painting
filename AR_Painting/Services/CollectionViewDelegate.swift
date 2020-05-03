@@ -34,4 +34,10 @@ class CollectionViewDelegate: NSObject, UICollectionViewDelegateFlowLayout {
     return UIEdgeInsets(top: interItemSpacing, left: interItemSpacing * 0.5, bottom: interItemSpacing, right: interItemSpacing * 0.5)
   }
   
+  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    let cell = collectionView.cellForItem(at: indexPath) as! PhotoCollectionCell
+    if indexPath.section == 0 {
+    }
+  }
+  
 }

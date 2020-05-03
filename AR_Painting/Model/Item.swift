@@ -45,10 +45,11 @@ class Item {
     let manager = PHImageManager.default()
     let assets = self.getUserImages()
     for i in 0 ..< assets.count {
-      let asset = assets.object(at: i)
-      manager.requestImage(for: asset, targetSize: size, contentMode: .aspectFit, options: nil) { (image , _) in
-        self.data[.asset]?.append(image)
-      }
+      
+//      let asset = assets.object(at: i)
+//      manager.requestImage(for: asset, targetSize: size, contentMode: .aspectFit, options: nil) { (image , _) in
+//        self.data[.asset]?.append(image)
+//      }
       
     }
   }
