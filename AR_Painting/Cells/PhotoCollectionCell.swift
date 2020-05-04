@@ -7,15 +7,25 @@
 //
 
 import UIKit
+import Photos
 
 class PhotoCollectionCell: UICollectionViewCell {
+  
+  static let reuseIdentifier = String(describing: PhotoCollectionCell.self)
   
   @IBOutlet weak var imageView: UIImageView!
   
   override func awakeFromNib() {
     super.awakeFromNib()
-    let randomColor = UIColor(red: CGFloat.random(in: 0 ... 1), green: CGFloat.random(in: 0 ... 1), blue: CGFloat.random(in: 0 ... 1), alpha: 1.0)
-    self.imageView.backgroundColor = randomColor
+//    self.layer.backgroundColor = UIColor.lightGray.cgColor
+  }
+  
+  func getImage(from asset: PHAsset) -> UIImage? {
+    var image = UIImage()
+    PHImageManager().requestImage(for: asset, targetSize: self.frame.size, contentMode: .aspectFill, options: nil) { assetIamge, info  in
+      image = assetIamge ?? UIImage(named: "NoImage")!
+    }
+    return image
   }
   
   

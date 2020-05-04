@@ -10,12 +10,16 @@ import UIKit
 import SceneKit
 import ARKit
 import CoreGraphics
+import Photos
 
 class ViewController: UIViewController, ARSCNViewDelegate {
   
   var photoNode: SCNNode!
-  var planeImage: UIImage? = UIImage(named: "art.scnassets/B19C8B49-A81E-4760-8022-D60DB4C69C8C_1_105_c.jpeg")
+  var pointerNode: SCNNode?
+  var planeImage: UIImage? = UIImage(named: "art.scnassets/Textures/bird.jpeg")
   var sceneHasPicture: Bool = false
+  var arrow: SCNNode!
+  var focusPoint: CGPoint!
   
   @IBOutlet var sceneView: ARSCNView!
   @IBOutlet weak var upperView: UIView!
@@ -23,15 +27,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   @IBOutlet weak var testButton: UIButton!
   
   @IBAction func test(_ sender: Any) {
-    self.update(image: self.planeImage == UIImage(named: "art.scnassets/3623_20.jpg") ? UIImage(named: "art.scnassets/B19C8B49-A81E-4760-8022-D60DB4C69C8C_1_105_c.jpeg") : UIImage(named: "art.scnassets/3623_20.jpg"))
+    self.update(image: self.planeImage == UIImage(named: "art.scnassets/Textures/guy.jpg") ? UIImage(named: "art.scnassets/Textures/bird.jpeg") : UIImage(named: "art.scnassets/Textures/guy.jpg"))
     print("Button pressed")
   }
   
   @IBAction func saveNewImage(_ unwindSegue: UIStoryboardSegue) {
-    guard unwindSegue.identifier == "passPhoto" else {
+    guard unwindSegue.identifier == "passImageBack" else {
       return
     }
     guard let source = unwindSegue.source as? ChoosePhotoController else {
+      return
+    }
+    guard source.image != nil else {
       return
     }
     self.planeImage = source.image
@@ -46,17 +53,15 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     self.applyImage(transform: SCNMatrix4(frame.camera.transform), offset: SCNVector3(x: 0.0, y: 0.0, z: -2.0))
     self.sceneHasPicture = true
-    print("+")
+//    print("+", self.planeImage)
   }
   
   @IBAction func swipeDownGestureHandler(_ sender: Any) {
     guard self.sceneHasPicture else {
       return
     }
-//    print("-", sceneView.scene.rootNode.childNodes[0], "\n" , sceneView.scene.rootNode.childNodes[1], "\n" , sceneView.scene.rootNode.childNodes[2])
     self.sceneView.scene.rootNode.childNode(withName: "picturePlane", recursively: false)?.removeFromParentNode()
     self.sceneHasPicture = false
-//    print(sceneView.scene.rootNode.childNodes.count)
   }
   
   override func viewDidLoad() {
@@ -67,8 +72,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     self.update(image: self.planeImage)
     self.configureViews()
     self.updatePlaneNode()
-//    print(self.planeImage)
-//    print(self.planeImage?.size)
+    self.getPhotoAccess()
+    self.loadModel()
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -80,10 +85,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
-    
     sceneView.session.pause()
   }
-  
   
   func initScene() {
     let scene = SCNScene()
@@ -101,7 +104,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
       return
     }
     let config = ARWorldTrackingConfiguration()
-    config.worldAlignment = .gravity
+    config.worldAlignment = .camera
     config.providesAudioData = false
     config.environmentTexturing = .automatic
     config.planeDetection = .vertical
@@ -130,10 +133,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   
   func session(_ session: ARSession, didFailWithError error: Error) {
   }
-  
+
   func sessionWasInterrupted(_ session: ARSession) {
   }
-  
+
   func sessionInterruptionEnded(_ session: ARSession) {
   }
   
@@ -145,13 +148,12 @@ extension ViewController {
     let planeGeometry = SCNPlane(width: CGFloat(planeAnchor.extent.x), height: CGFloat(planeAnchor.extent.y))
     
     let planeMaterial = SCNMaterial()
-    planeMaterial.diffuse.contents = "art.scnassets/Surface_Diffuse.png"
+    planeMaterial.diffuse.contents = "art.scnassets/Textures/whiteDots_Diffuse.png"
     planeGeometry.materials = [planeMaterial]
     
     let planeNode = SCNNode(geometry: planeGeometry)
-    planeNode.position = SCNVector3Make(planeAnchor.extent.x, planeAnchor.extent.y, 0)
+    planeNode.position = SCNVector3Make(planeAnchor.center.x, planeAnchor.center.y, 0)
     
-    planeNode.transform = SCNMatrix4MakeRotation(-Float.pi / 2, 0, 1, 0)
     return planeNode
     
   }
@@ -165,13 +167,9 @@ extension ViewController {
   
   func applyImage(transform: SCNMatrix4, offset: SCNVector3) {
     
-    guard let image = self.planeImage else {
-      return
-    }
-    
     let position = SCNVector3(transform.m41 + offset.x,
-                              transform.m42 + offset.y,
-                              transform.m43 + offset.z)
+                            transform.m42 + offset.y,
+                            transform.m43 + offset.z)
     
     let width = self.planeImage?.size.width
     let height = self.planeImage?.size.height
@@ -200,19 +198,18 @@ extension ViewController {
   }
   
   func loadModel() {
-    let photoScene = SCNScene(named: "art.scnassets/PictureScene.scn")!
-    photoNode = photoScene.rootNode.childNode(withName: "photo", recursively: false)
-    photoNode!.geometry?.firstMaterial?.diffuse.contents = self.planeImage
-    photoNode!.isHidden = false
-    sceneView.scene.rootNode.addChildNode(photoNode)
-//    sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
-//      node.removeFromParentNode()
-//    }
+    let photoScene = SCNScene(named: "art.scnassets/Models/PictureScene.scn")!
+//    photoNode = photoScene.rootNode.childNode(withName: "photo", recursively: false)
+//    photoNode!.geometry?.firstMaterial?.diffuse.contents = self.planeImage
+//    photoNode!.isHidden = false
+//    sceneView.scene.rootNode.addChildNode(photoNode)
+    let arrowScene = SCNScene(named: "art.scnassets/Models/ArrowScene.scn")
+    arrow = arrowScene?.rootNode.childNode(withName: "arrow", recursively: false)
+    sceneView.scene.rootNode.addChildNode(arrow)
   }
   
   func configureViews() {
     upperView.backgroundColor = CustomColors.blue
-    label.textColor = CustomColors.pink
     testButton.layer.cornerRadius = 30
   }
   
@@ -226,6 +223,22 @@ extension ViewController {
     
     let picture = self.sceneView.snapshot()
     destination.image = picture
+  }
+  
+  func getPhotoAccess() {
+    let status = PHPhotoLibrary.authorizationStatus()
+    
+    DispatchQueue.main.async {
+      switch status {
+      default:
+        PHPhotoLibrary.requestAuthorization { status in
+          switch status {
+          default:
+            break
+          }
+        }
+      }
+    }
   }
   
   

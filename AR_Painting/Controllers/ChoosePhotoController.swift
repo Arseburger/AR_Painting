@@ -11,70 +11,38 @@ import Photos
 
 class ChoosePhotoController: UIViewController {
   
+  let dataSource = DataSource()
+  let delegate = CollectionViewDelegate(numberOfItemsPerRow: 3, interItemSpacing: 6)
   var image: UIImage?
+  var galleryLoaded: Bool = false
+  var selectedItem: Item?
   
   @IBOutlet weak var topView: UIView!
   @IBOutlet weak var button: UIButton!
-  @IBOutlet weak var tableView: UITableView!
+  @IBOutlet weak var collectionView: UICollectionView!
+  @IBOutlet weak var bottomView: UIView!
+  
+  @IBOutlet weak var overlayView: UIView!
+  @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
   
   @IBAction func close(_ sender: Any) {
     self.dismiss(animated: true, completion: nil)
+  }
+  @IBAction func shiet(_ sender: Any) {
+    self.getRandomPhoto()
   }
   
   override func viewDidLoad() {
     super.viewDidLoad()
     configureViews()
-    tableView.dataSource = self
-    tableView.delegate = self
-    tableView.rowHeight = UITableView.automaticDimension
-    tableView.contentInsetAdjustmentBehavior = .never
-    tableView.separatorStyle = .none
-    tableView.isScrollEnabled = false
-  }
-  
-}
-
-extension ChoosePhotoController: UITableViewDelegate, UITableViewDataSource {
-  
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return 4
-  }
-  
-  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    collectionView.dataSource = dataSource
+    collectionView.delegate = delegate
     
-    switch indexPath.row {
-    case 0:
-      let cell = tableView.dequeueReusableCell(withIdentifier: "titleCell", for: indexPath) as! TitleCell
-      cell.label?.text = "Загрузить случайное фото"
-      cell.label?.font = UIFont.systemFont(ofSize: 22.0, weight: .bold)
-      return cell
-      
-    case 1:
-      let cell = tableView.dequeueReusableCell(withIdentifier: "downloadSelectionCell", for: indexPath) as! DownloadSelectionCell
-      return cell
-      
-    case 2:
-      let cell = tableView.dequeueReusableCell(withIdentifier: "titleCell", for: indexPath) as! TitleCell
-      cell.label?.text = "Выбрать фото из галереи"
-      cell.label?.font = UIFont.systemFont(ofSize: 22.0, weight: .bold)
-      return cell
-      
-    case 3:
-      let cell = tableView.dequeueReusableCell(withIdentifier: "albumSelectionCell", for: indexPath) as! AlbumSelectionCell
-      return cell
-
-    default:
-      return UITableViewCell()
-    }
-  }
-  
-  func getUnsplashImage() {
-    let indexPath = IndexPath(row: 1, section: 0)
-    guard let cell = tableView.cellForRow(at: indexPath) as? DownloadSelectionCell else {
-      return
-    }
-    self.image = cell.photo
-    self.button.isEnabled = true
+//    if galleryLoaded == false {
+//      dataSource.items.getImages()
+//      self.collectionView.reloadData()
+//      galleryLoaded = true
+//    }
   }
   
 }
@@ -83,14 +51,51 @@ extension ChoosePhotoController {
   
   func configureViews() {
     topView.backgroundColor = CustomColors.blue
-    button.backgroundColor = CustomColors.pink
+    button.backgroundColor = UIColor.white
+    button.layer.cornerRadius = 10
+    button.setTitleColor(UIColor.lightGray, for: .disabled)
+    button.setTitleColor(CustomColors.blue, for: .normal)
     button.setTitle("Выберите изображение", for: .disabled)
     button.setTitle("Готово", for: .normal)
-//    button.isEnabled = false
+    button.isEnabled = true
+    overlayView.isHidden = true
+    activityIndicator.isHidden = true
+  }
+  
+  func showLoadingState() {
+    self.activityIndicator.isHidden = false
+    self.overlayView.isHidden = false
+    self.activityIndicator.startAnimating()
+    self.button.isEnabled = false
+    self.button.setTitle("Загрузка", for: .disabled)
+    self.view.bringSubviewToFront(overlayView)
+  }
+  
+  func hideLoadingState() {
+    self.activityIndicator.stopAnimating()
+    self.activityIndicator.isHidden = true
+    self.overlayView.isHidden = true
+    self.button.isEnabled = true
+    self.view.sendSubviewToBack(overlayView)
+  }
+  
+  func getRandomPhoto() {
+    var image = UIImage()
+    let service = BaseService()
+    self.showLoadingState()
+    service.loadRandomPhoto(onComplete: { photos in
+      DispatchQueue.main.async {
+        let url = URL(string: (photos.urls.regular))
+        let data = try? Data(contentsOf: url!)
+        image = UIImage(data: data!)!
+      }
+      
+      
+      print("done")
+      self.image = image
+    }) { error in print("mimo") }
   }
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    self.getUnsplashImage()
   }
-  
 }
