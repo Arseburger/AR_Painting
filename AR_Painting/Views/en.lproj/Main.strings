@@ -1,0 +1,33 @@
+
+/* Class = "UINavigationItem"; title = "ARPainting"; ObjectID = "2qv-C6-Ffb"; */
+"2qv-C6-Ffb.title" = "ARPainting";
+
+/* Class = "UILabel"; text = "Выбор фото"; ObjectID = "4DV-fc-f2M"; */
+"4DV-fc-f2M.text" = "Выбор фото";
+
+/* Class = "UIButton"; normalTitle = "Закрыть"; ObjectID = "4wz-d8-kfe"; */
+"4wz-d8-kfe.normalTitle" = "Закрыть";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "8VJ-mG-Tj7"; */
+"8VJ-mG-Tj7.text" = "Label";
+
+/* Class = "UIViewController"; title = "ARPainting"; ObjectID = "B9T-fl-gFn"; */
+"B9T-fl-gFn.title" = "ARPainting";
+
+/* Class = "UILabel"; text = "ARPainting"; ObjectID = "YOw-Dm-HK0"; */
+"YOw-Dm-HK0.text" = "ARPainting";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "Yo0-Ka-Mr0"; */
+"Yo0-Ka-Mr0.normalTitle" = "Button";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "ZTR-Wf-RUE"; */
+"ZTR-Wf-RUE.normalTitle" = "Button";
+
+/* Class = "UIButton"; normalTitle = "Закрыть"; ObjectID = "bwX-fZ-eEE"; */
+"bwX-fZ-eEE.normalTitle" = "Закрыть";
+
+/* Class = "UILabel"; text = "ARPainting"; ObjectID = "hfQ-h2-q38"; */
+"hfQ-h2-q38.text" = "ARPainting";
+
+/* Class = "UIButton"; normalTitle = "Готово"; ObjectID = "rEk-kS-Me1"; */
+"rEk-kS-Me1.normalTitle" = "Готово";

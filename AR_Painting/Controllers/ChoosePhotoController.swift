@@ -12,9 +12,10 @@ import Photos
 class ChoosePhotoController: UIViewController {
   
   let dataSource = DataSource()
-  let delegate = CollectionViewDelegate(numberOfItemsPerRow: 5, interItemSpacing: 10)
-  
+  let delegate = CollectionViewDelegate(numberOfItemsPerRow: 3, interItemSpacing: 6)
   var image: UIImage?
+  var galleryLoaded: Bool = false
+  var selectedItem: Item?
   
   @IBOutlet weak var topView: UIView!
   @IBOutlet weak var button: UIButton!
@@ -27,10 +28,8 @@ class ChoosePhotoController: UIViewController {
   @IBAction func close(_ sender: Any) {
     self.dismiss(animated: true, completion: nil)
   }
-  
-  @IBAction func showLoader(_ sender: Any) {
-    showLoadingState()
-    print(Item.shared.getUserImages().count)
+  @IBAction func shiet(_ sender: Any) {
+    self.getRandomPhoto()
   }
   
   override func viewDidLoad() {
@@ -38,7 +37,12 @@ class ChoosePhotoController: UIViewController {
     configureViews()
     collectionView.dataSource = dataSource
     collectionView.delegate = delegate
-    collectionView.reloadData()
+    
+//    if galleryLoaded == false {
+//      dataSource.items.getImages()
+//      self.collectionView.reloadData()
+//      galleryLoaded = true
+//    }
   }
   
 }
@@ -67,21 +71,31 @@ extension ChoosePhotoController {
     self.view.bringSubviewToFront(overlayView)
   }
   
-  func getRandomPhoto() -> UIImage {
+  func hideLoadingState() {
+    self.activityIndicator.stopAnimating()
+    self.activityIndicator.isHidden = true
+    self.overlayView.isHidden = true
+    self.button.isEnabled = true
+    self.view.sendSubviewToBack(overlayView)
+  }
+  
+  func getRandomPhoto() {
     var image = UIImage()
     let service = BaseService()
     self.showLoadingState()
     service.loadRandomPhoto(onComplete: { photos in
-      DispatchQueue.global().async {
+      DispatchQueue.main.async {
         let url = URL(string: (photos.urls.regular))
         let data = try? Data(contentsOf: url!)
         image = UIImage(data: data!)!
       }
+      
+      
+      print("done")
+      self.image = image
     }) { error in print("mimo") }
-    return image
   }
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        self.image = self.getRandomPhoto()
   }
 }

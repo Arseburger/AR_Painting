@@ -14,5 +14,4 @@ enum CustomColors {
   static let pink = UIColor.init(red: 226.0 / 255.0, green: 192.0 / 255.0, blue: 202.0 / 255.0, alpha: 1.0)
 }
 
-public let leckerliOne = UIFont.init(name: "LeckerliOne-Regular.otf", size: 17.0)
 

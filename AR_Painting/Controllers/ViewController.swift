@@ -10,6 +10,7 @@ import UIKit
 import SceneKit
 import ARKit
 import CoreGraphics
+import Photos
 
 class ViewController: UIViewController, ARSCNViewDelegate {
   
@@ -17,6 +18,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   var pointerNode: SCNNode?
   var planeImage: UIImage? = UIImage(named: "art.scnassets/Textures/bird.jpeg")
   var sceneHasPicture: Bool = false
+  var arrow: SCNNode!
+  var focusPoint: CGPoint!
   
   @IBOutlet var sceneView: ARSCNView!
   @IBOutlet weak var upperView: UIView!
@@ -29,10 +32,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   }
   
   @IBAction func saveNewImage(_ unwindSegue: UIStoryboardSegue) {
-    guard unwindSegue.identifier == "passPhoto" else {
+    guard unwindSegue.identifier == "passImageBack" else {
       return
     }
     guard let source = unwindSegue.source as? ChoosePhotoController else {
+      return
+    }
+    guard source.image != nil else {
       return
     }
     self.planeImage = source.image
@@ -47,7 +53,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     self.applyImage(transform: SCNMatrix4(frame.camera.transform), offset: SCNVector3(x: 0.0, y: 0.0, z: -2.0))
     self.sceneHasPicture = true
-    print("+")
+//    print("+", self.planeImage)
   }
   
   @IBAction func swipeDownGestureHandler(_ sender: Any) {
@@ -66,6 +72,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     self.update(image: self.planeImage)
     self.configureViews()
     self.updatePlaneNode()
+    self.getPhotoAccess()
+    self.loadModel()
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -80,7 +88,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     sceneView.session.pause()
   }
   
-  
   func initScene() {
     let scene = SCNScene()
     scene.isPaused = false
@@ -89,7 +96,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   
   func initSceneView() {
     sceneView.delegate = self
-//    sceneView.debugOptions = []
     sceneView.showsStatistics = false
   }
   
@@ -142,13 +148,12 @@ extension ViewController {
     let planeGeometry = SCNPlane(width: CGFloat(planeAnchor.extent.x), height: CGFloat(planeAnchor.extent.y))
     
     let planeMaterial = SCNMaterial()
-    planeMaterial.diffuse.contents = "art.scnassets/Textures/Surface_Diffuse.png"
+    planeMaterial.diffuse.contents = "art.scnassets/Textures/whiteDots_Diffuse.png"
     planeGeometry.materials = [planeMaterial]
     
     let planeNode = SCNNode(geometry: planeGeometry)
-    planeNode.position = SCNVector3Make(planeAnchor.extent.x, planeAnchor.extent.y, 0)
+    planeNode.position = SCNVector3Make(planeAnchor.center.x, planeAnchor.center.y, 0)
     
-    planeNode.transform = SCNMatrix4MakeRotation(-Float.pi / 2, 0, 1, 0)
     return planeNode
     
   }
@@ -194,16 +199,17 @@ extension ViewController {
   
   func loadModel() {
     let photoScene = SCNScene(named: "art.scnassets/Models/PictureScene.scn")!
-    photoNode = photoScene.rootNode.childNode(withName: "photo", recursively: false)
-    photoNode!.geometry?.firstMaterial?.diffuse.contents = self.planeImage
-    photoNode!.isHidden = false
-    sceneView.scene.rootNode.addChildNode(photoNode)
+//    photoNode = photoScene.rootNode.childNode(withName: "photo", recursively: false)
+//    photoNode!.geometry?.firstMaterial?.diffuse.contents = self.planeImage
+//    photoNode!.isHidden = false
+//    sceneView.scene.rootNode.addChildNode(photoNode)
+    let arrowScene = SCNScene(named: "art.scnassets/Models/ArrowScene.scn")
+    arrow = arrowScene?.rootNode.childNode(withName: "arrow", recursively: false)
+    sceneView.scene.rootNode.addChildNode(arrow)
   }
   
   func configureViews() {
     upperView.backgroundColor = CustomColors.blue
-    label.textColor = CustomColors.pink
-    label.font = leckerliOne
     testButton.layer.cornerRadius = 30
   }
   
@@ -217,6 +223,22 @@ extension ViewController {
     
     let picture = self.sceneView.snapshot()
     destination.image = picture
+  }
+  
+  func getPhotoAccess() {
+    let status = PHPhotoLibrary.authorizationStatus()
+    
+    DispatchQueue.main.async {
+      switch status {
+      default:
+        PHPhotoLibrary.requestAuthorization { status in
+          switch status {
+          default:
+            break
+          }
+        }
+      }
+    }
   }
   
   

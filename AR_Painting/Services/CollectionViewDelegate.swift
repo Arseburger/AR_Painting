@@ -35,8 +35,10 @@ class CollectionViewDelegate: NSObject, UICollectionViewDelegateFlowLayout {
   }
   
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    let cell = collectionView.cellForItem(at: indexPath) as! PhotoCollectionCell
     if indexPath.section == 0 {
+      
+    } else {
+      
     }
   }
   

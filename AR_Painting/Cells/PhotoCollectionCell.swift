@@ -28,4 +28,5 @@ class PhotoCollectionCell: UICollectionViewCell {
     return image
   }
   
+  
 }

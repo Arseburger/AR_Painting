@@ -16,7 +16,6 @@ class DataSource: NSObject, UICollectionViewDataSource {
   }
   
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//    items.getUserImages()
     let category = items.sections[section]
     let item = self.items.data[category]
     return item?.count ?? 0
@@ -27,15 +26,16 @@ class DataSource: NSObject, UICollectionViewDataSource {
       fatalError()
     }
     
+    if indexPath.section == 0 && indexPath.item == 0 {
+      cell.layer.cornerRadius = cell.frame.width * 0.5
+      cell.layer.borderColor = UIColor.lightGray.cgColor
+      cell.layer.borderWidth = 0.5
+    }
+    
     let category = items.sections[indexPath.section]
     let image = self.items.data[category]?[indexPath.item] ?? UIImage(named: "NoImage")
     
     cell.imageView.image = image
-//    if indexPath.section == 0 {
-//      cell.imageView.layer.borderColor = UIColor.lightGray.cgColor
-//      cell.imageView.layer.borderWidth = 1.0
-//      cell.imageView.layer.cornerRadius = cell.frame.width * 0.5
-//    }
     return cell
     
   }
