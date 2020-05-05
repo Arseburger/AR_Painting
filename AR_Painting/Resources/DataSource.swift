@@ -16,9 +16,13 @@ class DataSource: NSObject, UICollectionViewDataSource {
   }
   
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    let category = items.sections[section]
-    let item = self.items.data[category]
-    return item?.count ?? 0
+    if section == 0 {
+      return 1
+    } else {
+      let category = items.sections[section]
+      let item = self.items.data[category]
+      return item??.count ?? 0
+    }
   }
   
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -27,15 +31,19 @@ class DataSource: NSObject, UICollectionViewDataSource {
     }
     
     if indexPath.section == 0 && indexPath.item == 0 {
-      cell.layer.cornerRadius = cell.frame.width * 0.5
-      cell.layer.borderColor = UIColor.lightGray.cgColor
-      cell.layer.borderWidth = 0.5
+      cell.imageView.layer.cornerRadius = cell.frame.width * 0.5
+      cell.imageView.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.8).cgColor
+      cell.imageView.layer.borderWidth = 1.5
+      cell.imageView.image = UIImage(named: "UnsplashLogo")
+    } else {
+      cell.getImage(from: (items.data[.asset]??.object(at: indexPath.item))!)
     }
     
-    let category = items.sections[indexPath.section]
-    let image = self.items.data[category]?[indexPath.item] ?? UIImage(named: "NoImage")
     
-    cell.imageView.image = image
+    
+//    let category = items.sections[indexPath.section]
+//    let image = self.items.data[category]?[indexPath.item] ?? UIImage(named: "NoImage")
+    
     return cell
     
   }

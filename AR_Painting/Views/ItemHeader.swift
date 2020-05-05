@@ -13,7 +13,4 @@ class ItemHeader: UICollectionReusableView {
   
   @IBOutlet weak var sectionTitle: UILabel!
   
-//  override func awakeFromNib() {
-//    super.awakeFromNib()
-//  }
 }

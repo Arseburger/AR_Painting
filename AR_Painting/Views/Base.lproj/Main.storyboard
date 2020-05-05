@@ -314,17 +314,27 @@
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nUu-bq-3eC">
                                                     <rect key="frame" x="0.0" y="0.0" width="118" height="118"/>
                                                 </imageView>
+                                                <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="check" translatesAutoresizingMaskIntoConstraints="NO" id="O2c-OK-yeJ">
+                                                    <rect key="frame" x="85" y="85" width="25" height="25"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="25" id="vZq-gx-laa"/>
+                                                        <constraint firstAttribute="width" constant="25" id="xVY-yx-lPN"/>
+                                                    </constraints>
+                                                </imageView>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="nUu-bq-3eC" firstAttribute="leading" secondItem="bbp-qJ-6yK" secondAttribute="leading" id="5Ry-5Y-uFc"/>
                                                 <constraint firstAttribute="trailing" secondItem="nUu-bq-3eC" secondAttribute="trailing" id="RRN-qG-Axh"/>
                                                 <constraint firstItem="nUu-bq-3eC" firstAttribute="top" secondItem="bbp-qJ-6yK" secondAttribute="top" id="Tem-RD-UMV"/>
+                                                <constraint firstAttribute="bottom" secondItem="O2c-OK-yeJ" secondAttribute="bottom" constant="8" id="WsO-5s-Btu"/>
+                                                <constraint firstAttribute="trailing" secondItem="O2c-OK-yeJ" secondAttribute="trailing" constant="8" id="iKy-Ig-fST"/>
                                                 <constraint firstAttribute="bottom" secondItem="nUu-bq-3eC" secondAttribute="bottom" id="tyU-LV-ii7"/>
                                             </constraints>
                                         </collectionViewCellContentView>
                                         <size key="customSize" width="118" height="118"/>
                                         <connections>
                                             <outlet property="imageView" destination="nUu-bq-3eC" id="QbJ-w5-1Do"/>
+                                            <outlet property="starView" destination="O2c-OK-yeJ" id="NGK-Ik-8vZ"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -387,6 +397,7 @@
     <resources>
         <image name="Camera3" width="100" height="100"/>
         <image name="Gallery3" width="60" height="60"/>
+        <image name="check" width="25" height="25"/>
         <image name="shareButton" width="33.333332061767578" height="22"/>
     </resources>
 </document>
