@@ -72,11 +72,33 @@
                                     <segue destination="Imp-RR-mCS" kind="showDetail" id="juR-MU-SV9"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="85V-1F-nu8">
+                                <rect key="frame" x="199" y="440" width="16" height="16"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jjk-0W-JSg">
+                                        <rect key="frame" x="4" y="4" width="8" height="8"/>
+                                        <color key="backgroundColor" red="0.8862745098" green="0.75294117650000003" blue="0.79215686269999996" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="8" id="c2v-ev-02U"/>
+                                            <constraint firstAttribute="height" constant="8" id="d9X-U5-bKT"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" red="0.36470588240000001" green="0.54117647059999996" blue="0.65490196079999996" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="jjk-0W-JSg" firstAttribute="centerX" secondItem="85V-1F-nu8" secondAttribute="centerX" id="ABu-sY-qST"/>
+                                    <constraint firstItem="jjk-0W-JSg" firstAttribute="centerY" secondItem="85V-1F-nu8" secondAttribute="centerY" id="Jnw-9Y-ybP"/>
+                                    <constraint firstAttribute="height" constant="16" id="bk0-9l-b0w"/>
+                                    <constraint firstAttribute="width" constant="16" id="ldn-7E-kaq"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="85V-1F-nu8" firstAttribute="centerX" secondItem="Dq2-tU-kHS" secondAttribute="centerX" id="0rk-hs-0y8"/>
                             <constraint firstItem="liv-cv-jIp" firstAttribute="trailing" secondItem="dja-Wg-qt6" secondAttribute="trailing" id="85M-UU-zEE"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="leading" secondItem="dja-Wg-qt6" secondAttribute="leading" id="9dd-nV-usg"/>
+                            <constraint firstItem="85V-1F-nu8" firstAttribute="centerY" secondItem="Dq2-tU-kHS" secondAttribute="centerY" id="Epz-hn-4F7"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="top" secondItem="Dq2-tU-kHS" secondAttribute="top" id="KPZ-HX-Ut1"/>
                             <constraint firstAttribute="bottom" secondItem="BrB-h1-WRS" secondAttribute="bottom" id="QOj-iv-bPI"/>
                             <constraint firstItem="liv-cv-jIp" firstAttribute="leading" secondItem="dja-Wg-qt6" secondAttribute="leading" id="Wpu-Fo-WTN"/>
@@ -91,8 +113,10 @@
                     </view>
                     <navigationItem key="navigationItem" title="ARPainting" leftItemsSupplementBackButton="YES" id="2qv-C6-Ffb"/>
                     <connections>
+                        <outlet property="crosshair" destination="85V-1F-nu8" id="aff-uH-u7P"/>
                         <outlet property="label" destination="YOw-Dm-HK0" id="P68-pp-6Ij"/>
                         <outlet property="sceneView" destination="BrB-h1-WRS" id="rud-dK-IDz"/>
+                        <outlet property="smallCrosshair" destination="jjk-0W-JSg" id="tzh-cq-fQ9"/>
                         <outlet property="upperView" destination="liv-cv-jIp" id="adZ-v5-wLz"/>
                     </connections>
                 </viewController>

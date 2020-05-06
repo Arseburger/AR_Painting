@@ -30,6 +30,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   @IBOutlet var sceneView: ARSCNView!
   @IBOutlet weak var upperView: UIView!
   @IBOutlet weak var label: UILabel!
+  @IBOutlet weak var crosshair: UIView!
+  @IBOutlet weak var smallCrosshair: UIView!
   
   //MARK: IBActions -
   
@@ -56,6 +58,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     self.applyImage(transform: SCNMatrix4(frame.camera.transform), offset: SCNVector3(x: 0.0, y: 0.0, z: -2.0))
     self.sceneHasPicture = true
+    self.crosshair.isHidden = true
   }
   
   @IBAction func swipeDownGestureHandler(_ sender: Any) {
@@ -64,6 +67,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     self.sceneView.scene.rootNode.childNode(withName: "picturePlane", recursively: false)?.removeFromParentNode()
     self.sceneHasPicture = false
+    self.crosshair.isHidden = false
   }
   
   //MARK: Methods -
@@ -77,10 +81,16 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     self.configureViews()
 //    self.updatePlaneNode()
     self.loadModel()
+    self.configureCrosshair()
   }
   
   func configureViews() {
     upperView.backgroundColor = CustomColors.blue
+  }
+  
+  func configureCrosshair() {
+    crosshair.layer.cornerRadius = crosshair.frame.width * 0.5
+    smallCrosshair.layer.cornerRadius = smallCrosshair.frame.width * 0.5
   }
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -107,11 +117,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     let configuration = ARWorldTrackingConfiguration()
     sceneView.session.run(configuration)
+    crosshair.isHidden = false
     print(self.planeImage)
   }
   
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
+    self.crosshair.isHidden = true
     sceneView.session.pause()
   }
   

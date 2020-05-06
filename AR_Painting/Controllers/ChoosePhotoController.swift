@@ -15,18 +15,21 @@ class ChoosePhotoController: UIViewController {
   
   let dataSource = DataSource()
   
-  var image: UIImage? {
-    didSet {
-      print("got image")
-    }
-  }
+  var image: UIImage?
   
   var selectedItem: (Item.Category, PHAsset?)? = nil {
     didSet {
+//      self.showLoadingState()
+//      self.validate()
       if selectedItem?.0 == .unsplash {
-        getRandomPhoto { _ in return}
+        getRandomPhoto {
+          print("1")
+        }
       } else if selectedItem?.1 != nil {
-        getImage(from: (self.selectedItem?.1)!) { _ in return }
+        getImage(from: (self.selectedItem?.1)!) {
+//          self.validate()
+          print("2")
+        }
       }
       self.validate()
     }
@@ -57,25 +60,13 @@ class ChoosePhotoController: UIViewController {
   }
   
   @IBAction func passImage(_ sender: Any) {
-    
-//    self.showLoadingState()
-//
-//    self.prepareImage { [weak self] (image: UIImage?) in
-//
-//      guard let image = image else {
-//        return
-//      }
-//      self?.image = image
-//
-//    }
-//    self.hideLoadingState()
   }
   
   // MARK: Methods -
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    self.getPhotoAccess()
+    getPhotoAccess()
     configureViews()
     dataSource.items.getUserImages()
     collectionView.dataSource = dataSource
@@ -110,30 +101,19 @@ extension ChoosePhotoController {
     button.layer.cornerRadius = 10
     button.setTitleColor(UIColor.lightGray, for: .disabled)
     button.setTitleColor(CustomColors.blue, for: .normal)
-    button.setTitle("Выберите изображение", for: .disabled)
     button.setTitle("Готово", for: .normal)
     overlayView.isHidden = true
     activityIndicator.isHidden = true
   }
   
   func showLoadingState() {
-    self.activityIndicator.isHidden = false
-    self.overlayView.isHidden = false
-    self.activityIndicator.startAnimating()
-    self.button.isEnabled = false
+    print("shown")
     self.button.setTitle("Загрузка", for: .disabled)
-//    self.view.bringSubviewToFront(overlayView)
-  }
-  
-  func hideLoadingState() {
-    self.activityIndicator.stopAnimating()
-    self.activityIndicator.isHidden = true
-    self.overlayView.isHidden = true
-    self.button.isEnabled = true
-//    self.view.sendSubviewToBack(overlayView)
+    self.button.isEnabled = false
   }
  
   func validate() {
+    button.setTitle("Выберите изображение", for: .disabled)
     if self.selectedItem == nil {
       button.isEnabled = false
     } else {
@@ -141,35 +121,37 @@ extension ChoosePhotoController {
     }
   }
   
-  func getRandomPhoto(completion: (UIImage?) -> Void) {
+  func getRandomPhoto(completion: @escaping () -> Void) {
     var image = UIImage()
     let service = BaseService()
+//    self.showLoadingState()
     service.loadRandomPhoto(onComplete: { photos in
-        let url = URL(string: (photos.urls.regular))
-        let data = try? Data(contentsOf: url!)
-        image = UIImage(data: data!)!
-      
+      let url = URL(string: (photos.urls.regular))
+      let data = try? Data(contentsOf: url!)
+      image = UIImage(data: data!)!
       print("done")
+      completion()
       self.image = image
     }) { error in print("mimo") }
   }
   
-  func getImage(from asset: PHAsset, completion: @escaping (UIImage?) -> Void) {
+  func getImage(from asset: PHAsset, completion: @escaping () -> Void) {
     let options = PHImageRequestOptions()
     options.deliveryMode = PHImageRequestOptionsDeliveryMode.highQualityFormat
     PHImageManager().requestImage(for: asset, targetSize: .init(width: asset.pixelWidth, height: asset.pixelHeight), contentMode: .default, options: options) { assetImage, _  in
       self.image = assetImage
+      completion()
     }
     print("asset")
   }
   
-  func prepareImage(completion: @escaping (UIImage?) -> Void) {
-    if selectedItem?.0 == .unsplash {
-      self.getRandomPhoto(completion: completion)
-    } else {
-      self.getImage(from: (selectedItem?.1!)!, completion: completion)
-    }
-  }
+//  func prepareImage(completion: @escaping () -> Void) {
+//    if selectedItem?.0 == .unsplash {
+//      self.getRandomPhoto(completion: completion)
+//    } else {
+//      self.getImage(from: (selectedItem?.1!)!, completion: completion)
+//    }
+//  }
   
 }
 
@@ -204,6 +186,7 @@ extension ChoosePhotoController: UICollectionViewDelegateFlowLayout {
     } else {
       selectedItem = dataSource.items.item(at: indexPath)
     }
+//    self.showLoadingState()
     print(selectedItem)
   }
 
