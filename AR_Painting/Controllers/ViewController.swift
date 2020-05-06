@@ -18,7 +18,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   
   var photoNode: SCNNode!
   var pointerNode: SCNNode?
+  
   var planeImage: UIImage? = UIImage(named: "art.scnassets/Textures/bird.jpeg")
+  
   var sceneHasPicture: Bool = false
   var arrow: SCNNode!
   var focusPoint: CGPoint!
@@ -28,14 +30,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   @IBOutlet var sceneView: ARSCNView!
   @IBOutlet weak var upperView: UIView!
   @IBOutlet weak var label: UILabel!
-  @IBOutlet weak var testButton: UIButton!
   
   //MARK: IBActions -
-  
-  @IBAction func test(_ sender: Any) {
-    self.update(image: self.planeImage == UIImage(named: "art.scnassets/Textures/guy.jpg") ? UIImage(named: "art.scnassets/Textures/bird.jpeg") : UIImage(named: "art.scnassets/Textures/guy.jpg"))
-    print("Button pressed")
-  }
   
   @IBAction func saveNewImage(_ unwindSegue: UIStoryboardSegue) {
     guard unwindSegue.identifier == "passImageBack" else {
@@ -47,7 +43,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     guard source.image != nil else {
       return
     }
-    self.planeImage = source.image
+    self.update(image: source.image)
+//    self.planeImage = source.image
   }
   
   @IBAction func swipeUpGestureHandler(_ sender: Any) {
@@ -82,22 +79,21 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     self.loadModel()
   }
   
-  
   func configureViews() {
     upperView.backgroundColor = CustomColors.blue
-    testButton.layer.cornerRadius = 30
   }
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    guard segue.identifier == "passImage" else {
-      return
-    }
-    guard let destination = segue.destination as? PhotoController else {
-      return
-    }
-    
+        guard segue.identifier == "passImage" else {
+          return
+        }
+        guard let destination = segue.destination as? PhotoController else {
+          return
+        }
+
     let picture = self.sceneView.snapshot()
     destination.image = picture
+    
   }
   
   @objc func orientationChanged() {
@@ -111,6 +107,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     let configuration = ARWorldTrackingConfiguration()
     sceneView.session.run(configuration)
+    print(self.planeImage)
   }
   
   override func viewWillDisappear(_ animated: Bool) {

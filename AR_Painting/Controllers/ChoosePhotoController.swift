@@ -14,11 +14,26 @@ class ChoosePhotoController: UIViewController {
   // MARK: Properties -
   
   let dataSource = DataSource()
-  var image: UIImage?
-  var galleryLoaded: Bool = false
-  var selectedItem: (Item.Category, PHAsset?)?
-  let numberOfItemsPerRow: CGFloat = 4
-  let interItemSpacing: CGFloat = 6
+  
+  var image: UIImage? {
+    didSet {
+      print("got image")
+    }
+  }
+  
+  var selectedItem: (Item.Category, PHAsset?)? = nil {
+    didSet {
+      if selectedItem?.0 == .unsplash {
+        getRandomPhoto { _ in return}
+      } else if selectedItem?.1 != nil {
+        getImage(from: (self.selectedItem?.1)!) { _ in return }
+      }
+      self.validate()
+    }
+  }
+  
+  let numberOfItemsPerRow: CGFloat = 5
+  let interItemSpacing: CGFloat = 10
   var cellSize: CGSize {
     let maxWidth = UIScreen.main.bounds.width
     let scaling = interItemSpacing * numberOfItemsPerRow
@@ -40,8 +55,20 @@ class ChoosePhotoController: UIViewController {
   @IBAction func close(_ sender: Any) {
     self.dismiss(animated: true, completion: nil)
   }
-  @IBAction func shiet(_ sender: Any) {
-    self.getRandomPhoto()
+  
+  @IBAction func passImage(_ sender: Any) {
+    
+//    self.showLoadingState()
+//
+//    self.prepareImage { [weak self] (image: UIImage?) in
+//
+//      guard let image = image else {
+//        return
+//      }
+//      self?.image = image
+//
+//    }
+//    self.hideLoadingState()
   }
   
   // MARK: Methods -
@@ -89,15 +116,13 @@ extension ChoosePhotoController {
     activityIndicator.isHidden = true
   }
   
-  
-  
   func showLoadingState() {
     self.activityIndicator.isHidden = false
     self.overlayView.isHidden = false
     self.activityIndicator.startAnimating()
     self.button.isEnabled = false
     self.button.setTitle("Загрузка", for: .disabled)
-    self.view.bringSubviewToFront(overlayView)
+//    self.view.bringSubviewToFront(overlayView)
   }
   
   func hideLoadingState() {
@@ -105,45 +130,48 @@ extension ChoosePhotoController {
     self.activityIndicator.isHidden = true
     self.overlayView.isHidden = true
     self.button.isEnabled = true
-    self.view.sendSubviewToBack(overlayView)
+//    self.view.sendSubviewToBack(overlayView)
   }
-  
-  func getRandomPhoto() {
-    var image = UIImage()
-    let service = BaseService()
-    service.loadRandomPhoto(onComplete: { photos in
-      DispatchQueue.main.async {
-        let url = URL(string: (photos.urls.regular))
-        let data = try? Data(contentsOf: url!)
-        image = UIImage(data: data!)!
-      }
-      
-      
-      print("done")
-      self.image = image
-    }) { error in print("mimo") }
-  }
-  
+ 
   func validate() {
-    if self.selectedItem != nil {
+    if self.selectedItem == nil {
       button.isEnabled = false
     } else {
       button.isEnabled = true
     }
   }
   
-  func prepareImage() {
-    self.showLoadingState()
-    if selectedItem?.0 == .unsplash {
-      getRandomPhoto()
-    } else {
+  func getRandomPhoto(completion: (UIImage?) -> Void) {
+    var image = UIImage()
+    let service = BaseService()
+    service.loadRandomPhoto(onComplete: { photos in
+        let url = URL(string: (photos.urls.regular))
+        let data = try? Data(contentsOf: url!)
+        image = UIImage(data: data!)!
       
+      print("done")
+      self.image = image
+    }) { error in print("mimo") }
+  }
+  
+  func getImage(from asset: PHAsset, completion: @escaping (UIImage?) -> Void) {
+    let options = PHImageRequestOptions()
+    options.deliveryMode = PHImageRequestOptionsDeliveryMode.highQualityFormat
+    PHImageManager().requestImage(for: asset, targetSize: .init(width: asset.pixelWidth, height: asset.pixelHeight), contentMode: .default, options: options) { assetImage, _  in
+      self.image = assetImage
+    }
+    print("asset")
+  }
+  
+  func prepareImage(completion: @escaping (UIImage?) -> Void) {
+    if selectedItem?.0 == .unsplash {
+      self.getRandomPhoto(completion: completion)
+    } else {
+      self.getImage(from: (selectedItem?.1!)!, completion: completion)
     }
   }
   
-  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {  }
 }
-
 
 extension ChoosePhotoController: UICollectionViewDelegateFlowLayout {
   
@@ -158,41 +186,26 @@ extension ChoosePhotoController: UICollectionViewDelegateFlowLayout {
   }
   
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-    return UIEdgeInsets(top: interItemSpacing, left: interItemSpacing * 0.5, bottom: interItemSpacing, right: interItemSpacing * 0.5)
+    
+    if section == 0 {
+      return UIEdgeInsets(top: interItemSpacing, left: interItemSpacing, bottom: interItemSpacing, right: interItemSpacing)
+    } else {
+      return UIEdgeInsets(top: interItemSpacing, left: interItemSpacing * 0.5, bottom: interItemSpacing, right: interItemSpacing * 0.5)
+    }
+    
   }
   
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCollectionCell.reuseIdentifier, for: indexPath) as! PhotoCollectionCell
-    
-    if self.selectedItem?.0 == Item.shared.item(at: indexPath)?.0 && self.selectedItem?.1 == Item.shared.item(at: indexPath)?.1 {
-      collectionView.deselectItem(at: indexPath, animated: true)
-      cell.isChecked = false
+    if selectedItem?.0 == dataSource.items.item(at: indexPath)?.0 && selectedItem?.1 == dataSource.items.item(at: indexPath)?.1 {
+      collectionView.indexPathsForSelectedItems?.forEach {
+        (collectionView.cellForItem(at: $0) as! PhotoCollectionCell).starView.isHidden = true
+      }
       selectedItem = nil
     } else {
-      cell.isChecked = true
-      self.selectedItem = dataSource.items.item(at: indexPath)
+      selectedItem = dataSource.items.item(at: indexPath)
     }
     print(selectedItem)
   }
-  
-  func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
 
-    collectionView.indexPathsForVisibleItems.forEach {
-      guard let cell = collectionView.cellForItem(at: $0) as? PhotoCollectionCell else {
-        return
-      }
-      cell.isChecked = false
-      cell.starView.isHidden = true
-    }
-
-    
-//    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCollectionCell.reuseIdentifier, for: indexPath) as! PhotoCollectionCell
-//    collectionView.indexPathsForVisibleItems.forEach { _ in
-//
-//    }
-//    cell.isChecked = false
-//    cell.starView.isHidden = true
-//    print(indexPath)
-  }
-  
 }
+

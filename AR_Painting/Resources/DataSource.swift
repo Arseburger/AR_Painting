@@ -32,17 +32,12 @@ class DataSource: NSObject, UICollectionViewDataSource {
     
     if indexPath.section == 0 && indexPath.item == 0 {
       cell.imageView.layer.cornerRadius = cell.frame.width * 0.5
-      cell.imageView.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.8).cgColor
-      cell.imageView.layer.borderWidth = 1.5
+//      cell.imageView.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.8).cgColor
+//      cell.imageView.layer.borderWidth = 1.5
       cell.imageView.image = UIImage(named: "UnsplashLogo")
     } else {
       cell.getImage(from: (items.data[.asset]??.object(at: indexPath.item))!)
     }
-    
-    
-    
-//    let category = items.sections[indexPath.section]
-//    let image = self.items.data[category]?[indexPath.item] ?? UIImage(named: "NoImage")
     
     return cell
     

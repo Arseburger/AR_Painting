@@ -13,11 +13,9 @@ class PhotoCollectionCell: UICollectionViewCell {
   
   static let reuseIdentifier = String(describing: PhotoCollectionCell.self)
   
-  var isChecked: Bool = false
-  
   override var isSelected: Bool {
     didSet {
-      if !isChecked {
+      if isSelected {
         self.starView.isHidden = false
       } else {
         self.starView.isHidden = true
@@ -35,7 +33,7 @@ class PhotoCollectionCell: UICollectionViewCell {
   
   func getImage(from asset: PHAsset) {
     var image = UIImage()
-    PHImageManager().requestImage(for: asset, targetSize: self.imageView.frame.size, contentMode: .aspectFit, options: nil) { assetImage, _  in
+    PHImageManager().requestImage(for: asset, targetSize: self.imageView.frame.size, contentMode: .default, options: nil) { assetImage, _  in
       image = assetImage ?? UIImage(named: "NoImage")!
     }
     self.imageView.image = image

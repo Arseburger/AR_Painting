@@ -26,7 +26,7 @@ class Item {
   
   func item(at indexPath: IndexPath) -> (Category, PHAsset?)? {
     let category = sections[indexPath.section]
-    return (category, data[category]?!.object(at: indexPath.item))
+    return (category, data[category]??.object(at: indexPath.item))
   }
   
   func getUserImages() {
@@ -35,7 +35,6 @@ class Item {
     options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
     let assets = PHAsset.fetchAssets(with: options)
     data[.asset] = assets
-    print(assets.count)
   }
   
 }
