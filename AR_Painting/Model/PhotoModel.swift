@@ -10,8 +10,6 @@ import Foundation
 
 struct PhotoModel: Codable {
   let id: String
-  var width: Int
-  var height: Int
   let urls : PhotoURLs
 }
 

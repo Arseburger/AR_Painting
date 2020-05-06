@@ -14,27 +14,19 @@ class ChoosePhotoController: UIViewController {
   // MARK: Properties -
   
   let dataSource = DataSource()
-  
   var image: UIImage?
-  
   var selectedItem: (Item.Category, PHAsset?)? = nil {
     didSet {
-//      self.showLoadingState()
-//      self.validate()
       if selectedItem?.0 == .unsplash {
         getRandomPhoto {
-          print("1")
         }
       } else if selectedItem?.1 != nil {
         getImage(from: (self.selectedItem?.1)!) {
-//          self.validate()
-          print("2")
         }
       }
       self.validate()
     }
   }
-  
   let numberOfItemsPerRow: CGFloat = 5
   let interItemSpacing: CGFloat = 10
   var cellSize: CGSize {
@@ -107,7 +99,6 @@ extension ChoosePhotoController {
   }
   
   func showLoadingState() {
-    print("shown")
     self.button.setTitle("Загрузка", for: .disabled)
     self.button.isEnabled = false
   }
@@ -124,15 +115,13 @@ extension ChoosePhotoController {
   func getRandomPhoto(completion: @escaping () -> Void) {
     var image = UIImage()
     let service = BaseService()
-//    self.showLoadingState()
     service.loadRandomPhoto(onComplete: { photos in
       let url = URL(string: (photos.urls.regular))
       let data = try? Data(contentsOf: url!)
       image = UIImage(data: data!)!
-      print("done")
       completion()
       self.image = image
-    }) { error in print("mimo") }
+    }) { error in return }
   }
   
   func getImage(from asset: PHAsset, completion: @escaping () -> Void) {
@@ -142,16 +131,7 @@ extension ChoosePhotoController {
       self.image = assetImage
       completion()
     }
-    print("asset")
   }
-  
-//  func prepareImage(completion: @escaping () -> Void) {
-//    if selectedItem?.0 == .unsplash {
-//      self.getRandomPhoto(completion: completion)
-//    } else {
-//      self.getImage(from: (selectedItem?.1!)!, completion: completion)
-//    }
-//  }
   
 }
 
@@ -186,8 +166,6 @@ extension ChoosePhotoController: UICollectionViewDelegateFlowLayout {
     } else {
       selectedItem = dataSource.items.item(at: indexPath)
     }
-//    self.showLoadingState()
-    print(selectedItem)
   }
 
 }

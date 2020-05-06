@@ -17,13 +17,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   // MARK: Properties -
   
   var photoNode: SCNNode!
-  var pointerNode: SCNNode?
-  
   var planeImage: UIImage? = UIImage(named: "art.scnassets/Textures/bird.jpeg")
-  
   var sceneHasPicture: Bool = false
-  var arrow: SCNNode!
-  var focusPoint: CGPoint!
+  var imagePlaceholder: SCNNode? = SCNScene(named: "art.scnassets/Models/PictureScene.scn")?.rootNode.childNode(withName: "placeholder", recursively: false)
+  var center: CGPoint {
+    return CGPoint(x: UIScreen.main.bounds.width * 0.5, y: UIScreen.main.bounds.height * 0.5)
+  }
   
   //MARK: IBOutlets -
   
@@ -46,7 +45,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
       return
     }
     self.update(image: source.image)
-//    self.planeImage = source.image
   }
   
   @IBAction func swipeUpGestureHandler(_ sender: Any) {
@@ -65,7 +63,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     guard self.sceneHasPicture else {
       return
     }
-    self.sceneView.scene.rootNode.childNode(withName: "picturePlane", recursively: false)?.removeFromParentNode()
+    self.sceneView.scene.rootNode.childNode(withName: "placeholder", recursively: false)?.removeFromParentNode()
     self.sceneHasPicture = false
     self.crosshair.isHidden = false
   }
@@ -77,10 +75,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     self.initSceneView()
     self.initScene()
     self.initARSession()
-//    self.update(image: self.planeImage)
     self.configureViews()
-//    self.updatePlaneNode()
-    self.loadModel()
     self.configureCrosshair()
   }
   
@@ -103,27 +98,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
     let picture = self.sceneView.snapshot()
     destination.image = picture
-    
-  }
-  
-  @objc func orientationChanged() {
-    focusPoint = CGPoint(x: view.center.x, y: view.center.y * 1.25)
   }
   
   //MARK: ARManagment -
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    
     let configuration = ARWorldTrackingConfiguration()
     sceneView.session.run(configuration)
-    crosshair.isHidden = false
-    print(self.planeImage)
   }
   
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
-    self.crosshair.isHidden = true
     sceneView.session.pause()
   }
   
@@ -136,58 +122,22 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   func initSceneView() {
     sceneView.delegate = self
     sceneView.showsStatistics = false
-    focusPoint = CGPoint(x: view.center.x, y: view.center.y * 1.25)
-    NotificationCenter.default.addObserver(self, selector: #selector(orientationChanged), name: UIDevice.orientationDidChangeNotification, object: nil)
   }
   
   func initARSession() {
-    guard ARWorldTrackingConfiguration.isSupported else {
-      return
-    }
     let config = ARWorldTrackingConfiguration()
-    config.worldAlignment = .gravity
-    config.providesAudioData = false
-    config.environmentTexturing = .automatic
+//    config.worldAlignment = .gravity
     config.planeDetection = .horizontal
     sceneView.session.run(config)
-
   }
   
   func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-    DispatchQueue.main.async {
-      self.updateArrow()
-    }
   }
   
   func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-    
-    guard let planeAnchor = anchor as? ARPlaneAnchor else {
-      return
-    }
-    DispatchQueue.main.async {
-      let planeNode = self.createARPlaneNode(planeAnchor: planeAnchor, color: UIColor.yellow.withAlphaComponent(0.5))
-      node.addChildNode(planeNode)
-    }
   }
   
   func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-   
-    guard let planeAnchor = anchor as? ARPlaneAnchor else {
-      return
-    }
-    
-    DispatchQueue.main.async {
-      self.updateARPlaneNode(planeNode: node.childNodes[0], planeAnchor: planeAnchor)
-    }
-  }
-  
-  func session(_ session: ARSession, didFailWithError error: Error) {
-  }
-
-  func sessionWasInterrupted(_ session: ARSession) {
-  }
-
-  func sessionInterruptionEnded(_ session: ARSession) {
   }
   
 }
@@ -198,42 +148,17 @@ extension ViewController {
   
   func createARPlaneNode(planeAnchor: ARPlaneAnchor, color: UIColor) -> SCNNode {
     
-    let planeGeometry = SCNPlane(width: CGFloat(planeAnchor.extent.x), height: CGFloat(planeAnchor.extent.y))
+    let geometry = SCNGeometry()
+    let material = SCNMaterial()
     
-    let planeMaterial = SCNMaterial()
-    planeMaterial.diffuse.contents = "art.scnassets/Textures/Surface_Diffuse.png"
-    planeGeometry.materials = [planeMaterial]
+    geometry.firstMaterial?.diffuse.contents = material
     
-    let planeNode = SCNNode(geometry: planeGeometry)
-    planeNode.position = SCNVector3Make(planeAnchor.center.x, planeAnchor.center.y, 0)
+    let planeNode = SCNNode()
     
     return planeNode
   }
   
-  func updateARPlaneNode(planeNode: SCNNode, planeAnchor: ARPlaneAnchor) {
-    let planeGeometry = planeNode.geometry as! SCNPlane
-    planeGeometry.width = CGFloat(planeAnchor.extent.x)
-    planeGeometry.height = CGFloat(planeAnchor.extent.y)
-    planeNode.position = SCNVector3Make(planeAnchor.extent.x, planeAnchor.extent.y, 0)
-  }
-  
-  func updateArrow() {
-    let results = self.sceneView.hitTest(self.focusPoint, types: [.existingPlaneUsingExtent])
-    
-    if results.count == 1 {
-      if let match = results.first {
-        let t = match.worldTransform
-        
-        self.arrow.position = SCNVector3(t.columns.3.x, t.columns.3.y, t.columns.3.z)
-        arrow.isHidden = false
-      }
-    } else {
-      arrow.isHidden = true
-    }
-    
-    
-  }
-  
+  func updateARPlaneNode(planeNode: SCNNode, planeAnchor: ARPlaneAnchor) { }
   
   func applyImage(transform: SCNMatrix4, offset: SCNVector3) {
     
@@ -259,31 +184,8 @@ extension ViewController {
     
   }
   
-  
   func update(image: UIImage?) {
     self.planeImage = image
   }
-  
-  func loadModel() {
-    
-    let arrowScene = SCNScene(named: "art.scnassets/Models/ArrowScene.scn")
-    arrow = arrowScene?.rootNode.childNode(withName: "arrow", recursively: false)
-    sceneView.scene.rootNode.addChildNode(arrow)
-    
-//    let photoScene = SCNScene(named: "art.scnassets/Models/PictureScene.scn")!
-//    photoNode = photoScene.rootNode.childNode(withName: "photo", recursively: false)
-//    photoNode!.geometry?.firstMaterial?.diffuse.contents = self.planeImage
-//    photoNode!.isHidden = false
-//    sceneView.scene.rootNode.addChildNode(photoNode)
-    
-    
-//    arrow.isHidden = true
-    
-  }
-  
-  
-  
-  
-  
-  
+
 }

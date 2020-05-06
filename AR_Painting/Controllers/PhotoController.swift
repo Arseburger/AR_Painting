@@ -24,12 +24,10 @@ class PhotoController: UIViewController {
     self.present(activityController, animated: true, completion: nil)
   }
   
-  
   override func viewDidLoad() {
     super.viewDidLoad()
     configureViews()
   }
-  
   
   func configureViews() {
     topView.backgroundColor = CustomColors.blue

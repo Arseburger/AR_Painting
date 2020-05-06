@@ -12,7 +12,6 @@ import Photos
 class PhotoCollectionCell: UICollectionViewCell {
   
   static let reuseIdentifier = String(describing: PhotoCollectionCell.self)
-  
   override var isSelected: Bool {
     didSet {
       if isSelected {
@@ -25,7 +24,6 @@ class PhotoCollectionCell: UICollectionViewCell {
   
   @IBOutlet weak var imageView: UIImageView!
   @IBOutlet weak var starView: UIImageView!
-  
   
   override func awakeFromNib() {
     super.awakeFromNib()
@@ -42,8 +40,6 @@ class PhotoCollectionCell: UICollectionViewCell {
   override func prepareForReuse() {
     super.prepareForReuse()
     self.imageView.image = nil
-    self.imageView.layer.borderColor = .none
-    self.imageView.layer.borderWidth = 0
     self.imageView.layer.cornerRadius = 0
     self.starView.isHidden = isSelected ? false : true
   }

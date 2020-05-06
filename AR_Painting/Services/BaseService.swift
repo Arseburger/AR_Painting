@@ -32,12 +32,10 @@ class BaseService {
       
       guard let photos = try? JSONDecoder().decode(PhotoModel.self, from: data) else {
         onError(ServerError.decodingFailed)
-        print("couldn't decode")
         return
       }
       
       onComplete(photos)
-      
     }
     task.resume()
   }
