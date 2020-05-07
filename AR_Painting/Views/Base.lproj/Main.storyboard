@@ -67,7 +67,7 @@
                                     <constraint firstAttribute="height" constant="60" id="56D-an-El3"/>
                                     <constraint firstAttribute="width" constant="60" id="zWW-4P-ZDh"/>
                                 </constraints>
-                                <state key="normal" image="Gallery3"/>
+                                <state key="normal" image="Gallery"/>
                                 <connections>
                                     <segue destination="Imp-RR-mCS" kind="showDetail" id="juR-MU-SV9"/>
                                 </connections>
@@ -390,7 +390,7 @@
     </scenes>
     <resources>
         <image name="Camera3" width="100" height="100"/>
-        <image name="Gallery3" width="60" height="60"/>
+        <image name="Gallery" width="60" height="60"/>
         <image name="check" width="25" height="25"/>
         <image name="shareButton" width="33.333332061767578" height="22"/>
     </resources>
