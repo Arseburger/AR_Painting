@@ -49,8 +49,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   }
   
   @IBAction func reset(_ sender: Any) {
+    self.runSession()
+    self.removePicturePlanes()
+    self.removeAllNodes()
   }
-  
   
   //MARK: Methods -
   
@@ -96,6 +98,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     self.runSession()
+    self.removePicturePlanes()
+    self.removeAllNodes()
   }
   
   override func viewWillDisappear(_ animated: Bool) {
@@ -151,11 +155,7 @@ extension ViewController {
     configuration.planeDetection = .vertical
     configuration.isLightEstimationEnabled = true
     sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
-    
-    #if DEBUG
     sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints]
-    #endif
-    
     sceneView.delegate = self
   }
   
@@ -169,12 +169,10 @@ extension ViewController {
     DispatchQueue.main.async {
       if let planeAnchor = anchor as? ARPlaneAnchor, !self.sceneHasPicture {
         
-        #if DEBUG
         let debugPlaneNode = self.createPlaneNode(center: planeAnchor.center, extent: planeAnchor.extent)
         node.addChildNode(debugPlaneNode)
         self.picturePlanes.append(debugPlaneNode)
-        #endif
-        
+       
       } else if !self.sceneHasPicture {
         
         self.pictureNode = self.makePicture()
@@ -190,13 +188,13 @@ extension ViewController {
     }
   }
   
-  func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-    DispatchQueue.main.async {
-      if let planeAnchor = anchor as? ARPlaneAnchor, node.childNodes.count > 0, !self.sceneHasPicture {
-        self.updatePlaneNode(node.childNodes[0], center: planeAnchor.center, extent: planeAnchor.extent)
-      }
-    }
-  }
+//  func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
+//    DispatchQueue.main.async {
+//      if let planeAnchor = anchor as? ARPlaneAnchor, node.childNodes.count > 0, !self.sceneHasPicture {
+//        self.updatePlaneNode(node.childNodes[0], center: planeAnchor.center, extent: planeAnchor.extent)
+//      }
+//    }
+//  }
   
   func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
     DispatchQueue.main.async {
