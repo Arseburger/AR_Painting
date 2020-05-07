@@ -18,11 +18,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   
   var photoNode: SCNNode!
   var planeImage: UIImage? = UIImage(named: "art.scnassets/Textures/bird.jpeg")
-  var sceneHasPicture: Bool = false
-  var imagePlaceholder: SCNNode? = SCNScene(named: "art.scnassets/Models/PictureScene.scn")?.rootNode.childNode(withName: "placeholder", recursively: false)
   var center: CGPoint {
     return CGPoint(x: UIScreen.main.bounds.width * 0.5, y: UIScreen.main.bounds.height * 0.5)
   }
+  var picturePlanes: [SCNNode] = []
+  var pictureNode: SCNNode? = nil
+  var sceneHasPicture: Bool = false
   
   //MARK: IBOutlets -
   
@@ -47,45 +48,29 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     self.update(image: source.image)
   }
   
-  @IBAction func swipeUpGestureHandler(_ sender: Any) {
-    guard let frame = self.sceneView.session.currentFrame else {
-      return
-    }
-    guard !self.sceneHasPicture else {
-      return
-    }
-    self.applyImage(transform: SCNMatrix4(frame.camera.transform), offset: SCNVector3(x: 0.0, y: 0.0, z: -2.0))
-    self.sceneHasPicture = true
-    self.crosshair.isHidden = true
+  @IBAction func reset(_ sender: Any) {
   }
   
-  @IBAction func swipeDownGestureHandler(_ sender: Any) {
-    guard self.sceneHasPicture else {
-      return
-    }
-    self.sceneView.scene.rootNode.childNode(withName: "placeholder", recursively: false)?.removeFromParentNode()
-    self.sceneHasPicture = false
-    self.crosshair.isHidden = false
-  }
   
   //MARK: Methods -
   
   override func viewDidLoad() {
     super.viewDidLoad()
-//    self.initSceneView()
+    self.getPhotoAccess()
     self.initScene()
-//    self.runSession()
     self.configureViews()
     self.configureCrosshair()
   }
   
   func configureViews() {
     upperView.backgroundColor = CustomColors.blue
+    self.initSceneView()
   }
   
   func configureCrosshair() {
     crosshair.layer.cornerRadius = crosshair.frame.width * 0.5
     smallCrosshair.layer.cornerRadius = smallCrosshair.frame.width * 0.5
+    smallCrosshair.isHidden = true
   }
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -102,6 +87,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   
   //MARK: ARManagment -
   
+  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    if let hit = sceneView.hitTest(center, types: [.existingPlaneUsingExtent]).first {
+      sceneView.session.add(anchor: ARAnchor.init(transform: hit.worldTransform))
+    }
+  }
+  
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     self.runSession()
@@ -111,6 +102,38 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     super.viewWillDisappear(animated)
     sceneView.session.pause()
   }
+  
+  func update(image: UIImage?) {
+    self.planeImage = image
+  }
+  
+  func getPhotoAccess() {
+    let status = PHPhotoLibrary.authorizationStatus()
+    DispatchQueue.main.async {
+      switch status {
+      default:
+        PHPhotoLibrary.requestAuthorization { status in
+          switch status {
+          default:
+            break
+          }
+        }
+      }
+    }
+  }
+  
+  func removePicturePlanes() {
+    for picturePlaneNode in self.picturePlanes {
+      picturePlaneNode.removeFromParentNode()
+    }
+    self.picturePlanes = []
+  }
+  
+}
+
+extension ViewController {
+  
+  // MARK: ARManagment -
   
   func initScene() {
     let scene = SCNScene()
@@ -127,7 +150,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     let configuration = ARWorldTrackingConfiguration()
     configuration.planeDetection = .vertical
     configuration.isLightEstimationEnabled = true
-    sceneView.session.run(configuration)
+    sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
     
     #if DEBUG
     sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints]
@@ -136,51 +159,76 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     sceneView.delegate = self
   }
   
+  func removeAllNodes() {
+    removePicturePlanes()
+    self.pictureNode?.removeFromParentNode()
+    self.sceneHasPicture = false
+  }
+  
   func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
     DispatchQueue.main.async {
-      if let planeAnchor = anchor as? ARPlaneAnchor {
+      if let planeAnchor = anchor as? ARPlaneAnchor, !self.sceneHasPicture {
+        
         #if DEBUG
         let debugPlaneNode = self.createPlaneNode(center: planeAnchor.center, extent: planeAnchor.extent)
         node.addChildNode(debugPlaneNode)
+        self.picturePlanes.append(debugPlaneNode)
         #endif
+        
+      } else if !self.sceneHasPicture {
+        
+        self.pictureNode = self.makePicture()
+        if let picture = self.pictureNode {
+         
+          node.addChildNode(picture)
+          self.sceneHasPicture = true
+          self.removePicturePlanes()
+          self.sceneView.debugOptions = []
+          
+        }
       }
     }
   }
   
-}
-
-extension ViewController {
-  
-  // MARK: Surfaces -
-  
-  func updateARPlaneNode(planeNode: SCNNode, planeAnchor: ARPlaneAnchor) { }
-  
-  func applyImage(transform: SCNMatrix4, offset: SCNVector3) {
-    
-    let position = SCNVector3(transform.m41 + offset.x,
-                            transform.m42 + offset.y,
-                            transform.m43 + offset.z)
-    
-    let width = self.planeImage?.size.width
-    let height = self.planeImage?.size.height
-    let maxMeasure = CGFloat(max(width!, height!))
-    
-    let material = SCNMaterial()
-    material.diffuse.contents = self.planeImage
-    
-    let geometry = SCNPlane(width: width! / maxMeasure, height: height! / maxMeasure)
-    geometry.materials = [material]
-    
-    let imageNode = SCNNode(geometry: geometry)
-    imageNode.position = position
-    imageNode.name = "picturePlane"
-    
-    sceneView.scene.rootNode.addChildNode(imageNode)
-    
+  func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
+    DispatchQueue.main.async {
+      if let planeAnchor = anchor as? ARPlaneAnchor, node.childNodes.count > 0, !self.sceneHasPicture {
+        self.updatePlaneNode(node.childNodes[0], center: planeAnchor.center, extent: planeAnchor.extent)
+      }
+    }
   }
   
-  func update(image: UIImage?) {
-    self.planeImage = image
+  func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+    DispatchQueue.main.async {
+      if let _ = self.sceneView.hitTest(self.center, types: [.existingPlaneUsingExtent]).first {
+        self.smallCrosshair.isHidden = false
+      } else {
+        self.smallCrosshair.isHidden = true
+      }
+    }
+  }
+  
+  func makePicture() -> SCNNode {
+    let picture = SCNNode()
+    let maxSide = max((self.planeImage?.size.width)!, (self.planeImage?.size.height)!)
+    let width = (self.planeImage?.size.width)!
+    let height = (self.planeImage?.size.height)!
+    let image = SCNPlane(width: 0.5 * width / maxSide, height: 0.5 * height / maxSide)
+    let material = SCNMaterial()
+    material.diffuse.contents = self.planeImage
+    image.materials = [material]
+    let imageNode = SCNNode(geometry: image)
+    imageNode.transform = SCNMatrix4MakeRotation(-Float.pi / 2, 1, 0, 0)
+    picture.addChildNode(imageNode)
+    return picture
+  }
+  
+  func updatePlaneNode(_ node: SCNNode, center: vector_float3, extent: vector_float3) {
+    let geometry = node.geometry as? SCNPlane
+    
+    geometry?.width = CGFloat(extent.x)
+    geometry?.height = CGFloat(extent.z)
+    node.position = SCNVector3Make(center.x, 0, center.z)
   }
   
   func createPlaneNode(center: vector_float3, extent: vector_float3) -> SCNNode {

@@ -25,10 +25,6 @@
                             <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BrB-h1-WRS">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <gestureRecognizers/>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="pOy-kJ-Mje" appends="YES" id="KFh-9I-BH0"/>
-                                    <outletCollection property="gestureRecognizers" destination="sbC-bW-LHv" appends="YES" id="raJ-pC-VAO"/>
-                                </connections>
                             </arscnView>
                             <button opaque="NO" alpha="0.29999999999999999" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FWc-vJ-7ba">
                                 <rect key="frame" x="157" y="762" width="100" height="100"/>
@@ -47,7 +43,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="88"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ARPainting" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YOw-Dm-HK0">
-                                        <rect key="frame" x="164.66666666666666" y="52" width="84.666666666666657" height="21"/>
+                                        <rect key="frame" x="163" y="52" width="88.333333333333314" height="21"/>
                                         <fontDescription key="fontDescription" name="LeckerliOne" family="LeckerliOne" pointSize="17"/>
                                         <color key="textColor" red="0.8862745098" green="0.75294117650000003" blue="0.79215686269999996" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -92,6 +88,17 @@
                                     <constraint firstAttribute="width" constant="16" id="ldn-7E-kaq"/>
                                 </constraints>
                             </view>
+                            <button opaque="NO" alpha="0.29999999999999999" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NsX-Jg-KhO">
+                                <rect key="frame" x="334" y="782" width="60" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="5m7-bO-OsI"/>
+                                    <constraint firstAttribute="width" constant="60" id="IS8-gL-ntz"/>
+                                </constraints>
+                                <state key="normal" image="Reset Button"/>
+                                <connections>
+                                    <action selector="reset:" destination="B9T-fl-gFn" eventType="touchUpInside" id="CZq-PG-aUf"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
@@ -102,6 +109,8 @@
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="top" secondItem="Dq2-tU-kHS" secondAttribute="top" id="KPZ-HX-Ut1"/>
                             <constraint firstAttribute="bottom" secondItem="BrB-h1-WRS" secondAttribute="bottom" id="QOj-iv-bPI"/>
                             <constraint firstItem="liv-cv-jIp" firstAttribute="leading" secondItem="dja-Wg-qt6" secondAttribute="leading" id="Wpu-Fo-WTN"/>
+                            <constraint firstItem="dja-Wg-qt6" firstAttribute="trailing" secondItem="NsX-Jg-KhO" secondAttribute="trailing" constant="20" id="X6R-Ib-svx"/>
+                            <constraint firstItem="NsX-Jg-KhO" firstAttribute="top" secondItem="liv-cv-jIp" secondAttribute="bottom" constant="694" id="dvZ-5d-RVr"/>
                             <constraint firstItem="FWc-vJ-7ba" firstAttribute="bottom" secondItem="dja-Wg-qt6" secondAttribute="bottom" id="fZi-YO-kk9"/>
                             <constraint firstItem="FWc-vJ-7ba" firstAttribute="centerX" secondItem="Dq2-tU-kHS" secondAttribute="centerX" id="jl7-lP-5zp"/>
                             <constraint firstItem="fW3-84-5k9" firstAttribute="bottom" secondItem="dja-Wg-qt6" secondAttribute="bottom" constant="-20" id="lbU-XE-drL"/>
@@ -121,16 +130,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ED1-lE-Vjk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <swipeGestureRecognizer direction="down" id="pOy-kJ-Mje">
-                    <connections>
-                        <action selector="swipeDownGestureHandler:" destination="B9T-fl-gFn" id="4FL-aq-c2N"/>
-                    </connections>
-                </swipeGestureRecognizer>
-                <swipeGestureRecognizer direction="up" id="sbC-bW-LHv">
-                    <connections>
-                        <action selector="swipeUpGestureHandler:" destination="B9T-fl-gFn" id="ghI-W6-cDF"/>
-                    </connections>
-                </swipeGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1150.7246376811595" y="23.4375"/>
         </scene>
@@ -391,6 +390,7 @@
     <resources>
         <image name="Camera3" width="100" height="100"/>
         <image name="Gallery" width="60" height="60"/>
+        <image name="Reset Button" width="60" height="60"/>
         <image name="check" width="25" height="25"/>
         <image name="shareButton" width="33.333332061767578" height="22"/>
     </resources>

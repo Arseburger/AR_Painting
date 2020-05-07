@@ -58,7 +58,6 @@ class ChoosePhotoController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    getPhotoAccess()
     configureViews()
     dataSource.items.getUserImages()
     collectionView.dataSource = dataSource
@@ -70,22 +69,6 @@ class ChoosePhotoController: UIViewController {
 }
 
 extension ChoosePhotoController {
-  
-  func getPhotoAccess() {
-    let status = PHPhotoLibrary.authorizationStatus()
-    
-    DispatchQueue.main.async {
-      switch status {
-      default:
-        PHPhotoLibrary.requestAuthorization { status in
-          switch status {
-          default:
-            break
-          }
-        }
-      }
-    }
-  }
   
   func configureViews() {
     topView.backgroundColor = CustomColors.blue
