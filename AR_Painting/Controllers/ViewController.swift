@@ -72,9 +72,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    self.initSceneView()
+//    self.initSceneView()
     self.initScene()
-    self.initARSession()
+//    self.runSession()
     self.configureViews()
     self.configureCrosshair()
   }
@@ -104,8 +104,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    let configuration = ARWorldTrackingConfiguration()
-    sceneView.session.run(configuration)
+    self.runSession()
   }
   
   override func viewWillDisappear(_ animated: Bool) {
@@ -124,20 +123,28 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     sceneView.showsStatistics = false
   }
   
-  func initARSession() {
-    let config = ARWorldTrackingConfiguration()
-//    config.worldAlignment = .gravity
-    config.planeDetection = .horizontal
-    sceneView.session.run(config)
-  }
-  
-  func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+  func runSession() {
+    let configuration = ARWorldTrackingConfiguration()
+    configuration.planeDetection = .vertical
+    configuration.isLightEstimationEnabled = true
+    sceneView.session.run(configuration)
+    
+    #if DEBUG
+    sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints]
+    #endif
+    
+    sceneView.delegate = self
   }
   
   func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-  }
-  
-  func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
+    DispatchQueue.main.async {
+      if let planeAnchor = anchor as? ARPlaneAnchor {
+        #if DEBUG
+        let debugPlaneNode = self.createPlaneNode(center: planeAnchor.center, extent: planeAnchor.extent)
+        node.addChildNode(debugPlaneNode)
+        #endif
+      }
+    }
   }
   
 }
@@ -145,18 +152,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 extension ViewController {
   
   // MARK: Surfaces -
-  
-  func createARPlaneNode(planeAnchor: ARPlaneAnchor, color: UIColor) -> SCNNode {
-    
-    let geometry = SCNGeometry()
-    let material = SCNMaterial()
-    
-    geometry.firstMaterial?.diffuse.contents = material
-    
-    let planeNode = SCNNode()
-    
-    return planeNode
-  }
   
   func updateARPlaneNode(planeNode: SCNNode, planeAnchor: ARPlaneAnchor) { }
   
@@ -186,6 +181,21 @@ extension ViewController {
   
   func update(image: UIImage?) {
     self.planeImage = image
+  }
+  
+  func createPlaneNode(center: vector_float3, extent: vector_float3) -> SCNNode {
+    
+    let plane = SCNPlane(width: CGFloat(extent.x), height: CGFloat(extent.z))
+    
+    let planeMaterial = SCNMaterial()
+    planeMaterial.diffuse.contents = UIImage(named: "art.scnassets/Textures/ImagePlaceholder.png")
+    plane.materials = [planeMaterial]
+    
+    let planeNode = SCNNode(geometry: plane)
+    planeNode.position = SCNVector3Make(center.x, 0, center.z)
+    planeNode.transform = SCNMatrix4MakeRotation(-Float.pi / 2, 1, 0, 0)
+    
+    return planeNode
   }
 
 }
